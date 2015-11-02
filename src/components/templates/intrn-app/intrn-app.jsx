@@ -1,43 +1,43 @@
-import './todo-app.less';
+import './intrn-app.less';
 
 import React from 'react/addons';
 
 import AppActions from '../../../js/actions/app-actions';
-import TodoStore from '../../../js/stores/todo-store';
+import CompanyStore from '../../../js/stores/company-store';
 
 import Header from '../../molecules/header/header.jsx';
-import TodoList from '../../organisms/todo-list/todo-list.jsx';
+import CompanyList from '../../organisms/company-list/company-list.jsx';
 
-const TodoApp = React.createClass({
+const IntrnApp = React.createClass({
   getInitialState: function() {
-    return ({ todos: TodoStore.getAll() });
+    return ({ companies: CompanyStore.getAll() });
   },
 
   componentDidMount: function() {
-    TodoStore.addChangeListener(this._onChange);
+    CompanyStore.addChangeListener(this._onChange);
 
     // fetch the initial list of todos from the server
-    AppActions.getTodos();
+    AppActions.getCompanies();
   },
 
   componentWillUnmount: function() {
-    TodoStore.removeChangeListener(this._onChange);
+    CompanyStore.removeChangeListener(this._onChange);
   },
 
   _onChange: function() {
-    this.setState({ todos: TodoStore.getAll() });
+    this.setState({ companies: CompanyStore.getAll() });
   },
 
   render: function() {
     return (
-      <div className="todoApp">
-        <Header headerText='React + Flux Todos' />
+      <div className="intrnApp">
+        <Header headerText='intrn' />
         <div className="main">
-          <TodoList todos={this.state.todos} />
+          <CompanyList companies={this.state.companies} />
         </div>
       </div>
     );
   }
 });
 
-export default TodoApp;
+export default IntrnApp;

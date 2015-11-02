@@ -1,10 +1,30 @@
 import AppConstants from '../constants/app-constants';
 import AppDispatcher from '../dispatcher/app-dispatcher';
 import TodoApi from '../apis/todo-api';
+import CompanyApi from '../apis/company-api';
 
 /* Actions here perform two purposes: to send the appropriate action on to the
 dispatcher (which routes in on to the store), and to interface with the Api */
 const AppActions = {
+
+  getCompanies: function() {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.GET_COMPANIES
+    });
+
+    CompanyApi.getAll( (companies) => {
+      AppDispatcher.handleServerAction({
+        actionType: AppConstants.GET_COMPANIES_SUCCESS,
+        companies: companies
+      });
+    }, (error) => {
+      AppDispatcher.handleServerAction({
+        actionType: AppConstants.GET_COMPANIES_FAIL,
+        error: error
+      });
+    });
+  },
+
   addTodo: function(todo) {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.ADD_TODO,
