@@ -12,7 +12,7 @@ function createAll (companies) {
   _companies = {};
   companies.forEach( (company) => {
     company.synced = true;
-    _companies[company.id] = company;
+    _companies[company._id] = company;
   });
 }
 

@@ -2,7 +2,6 @@ import './todo-item.less';
 
 import React from 'react/addons';
 import AppActions from '../../../js/actions/app-actions';
-
 import Button from '../../atoms/button/button.jsx';
 
 const TodoItem = React.createClass({
@@ -22,7 +21,7 @@ const TodoItem = React.createClass({
 
   render: function() {
     let todo = this.props.todo;
-    let cx = React.addons.classSet;
+    let cx = React.addons.classSet
     let componentClasses = cx({
       'todoItem': true,
       'completed': todo.completed,

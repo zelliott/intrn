@@ -10,6 +10,7 @@ const CompanySchema = new Schema({
   location: String,
   classSize: Number,
   length: Number,
+  difficulty: Number,
   positions: [{
     type: Schema.ObjectId,
     ref: 'Position'
