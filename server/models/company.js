@@ -7,6 +7,8 @@ const CompanySchema = new Schema({
   name: String,
   rating: Number,
   salary: Number,
+  funness: Number,
+  perks: Number,
   location: String,
   classSize: Number,
   length: Number,

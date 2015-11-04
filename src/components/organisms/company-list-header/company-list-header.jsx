@@ -7,13 +7,15 @@ import ListHeaderButton from '../../molecules/list-header-button/list-header-but
 const CompanyListHeader = React.createClass({
 
   propTypes: {
-    sortableProps: React.PropTypes.arrayOf(React.PropTypes.string)
+    defaultProperty: React.PropTypes.string,
+    defaultComparator: React.PropTypes.bool,
+    comparableProps: React.PropTypes.arrayOf(React.PropTypes.object)
   },
 
   getInitialState: function() {
     return {
-      property: this.props.sortableProps[0],
-      comparator: true
+      property: this.props.defaultProperty,
+      comparator: this.props.defaultComparator
     };
   },
 
@@ -32,24 +34,34 @@ const CompanyListHeader = React.createClass({
   },
 
   render: function() {
-    let headerButtons = this.props.sortableProps.map((p, i) => {
+    let comparablePropsKeys = _.keys(this.props.comparableProps);
+    let headerButtons = comparablePropsKeys.map((p, i) => {
 
       let active = this.state.property === p;
       let comparator = active ? this.state.comparator : 0;
+      let isName = p === 'name';
+
+      let classes = React.addons.classSet({
+        'header-sort-button': true,
+        'wide-button': isName
+      });
 
       return (
         <ListHeaderButton
-          className='sortListButton'
+          className={classes}
           key={i}
           active={active}
+          property={p}
           comparator={comparator}
           action={this._onChange}
-          text={p} />
+          text={this.props.comparableProps[p]} />
       );
     });
 
     return (
-      <div>{headerButtons}</div>
+      <div className='list-header'>
+        {headerButtons}
+      </div>
     );
   }
 });

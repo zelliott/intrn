@@ -9,20 +9,30 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let _companies = [];
-let defaultProperty = 'name';
-let defaultComparator = true;
+let _defaultProperty = 'name';
+let _defaultComparator = true;
+let _comparableProps = {
+  rating: 'Rating',
+  name: 'Name',
+  salary: 'Salary',
+  funness: 'Funness',
+  perks: 'Perks',
+  difficulty: 'Difficulty',
+  classSize: 'Class Size',
+  length: 'Length'
+};
 
-function createAll(companies) {
+function createCompanies(companies) {
   _companies = companies;
 
   _.each(_companies, (company) => {
     company.synced = true;
   });
 
-  sortAll(defaultProperty, defaultComparator);
+  sortCompanies(_defaultProperty, _defaultComparator);
 }
 
-function sortAll(property, comparator) {
+function sortCompanies(property, comparator) {
   let order = comparator ? 'asc' : 'desc';
 
   _companies = _.sortByOrder(_companies, property, order);
@@ -50,9 +60,17 @@ const CompanyStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getAll: function() {
+  getCompanies: function() {
     return _companies;
   },
+
+  getDefaultListProps: function() {
+    return {
+      defaultProperty: _defaultProperty,
+      defaultComparator: _defaultComparator,
+      comparableProps: _comparableProps
+    };
+  }
 });
 
 /**
@@ -66,12 +84,12 @@ AppDispatcher.register( payload => {
   switch(action.actionType) {
 
     case AppConstants.GET_COMPANIES_SUCCESS:
-      createAll(action.companies)
+      createCompanies(action.companies)
       CompanyStore.emitChange();
       break;
 
     case AppConstants.SORT_COMPANIES:
-      sortAll(action.property, action.comparator)
+      sortCompanies(action.property, action.comparator)
       CompanyStore.emitChange();
       break;
 

@@ -1,0 +1,10 @@
+{
+  "rating": 2,
+  "name": "Apple",
+  "salary": 7000,
+  "funness": 50,
+  "perks": 86,
+  "difficulty": 30,
+  "classSize": 100,
+  "length": 60
+}

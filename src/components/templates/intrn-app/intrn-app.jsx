@@ -9,15 +9,16 @@ import CompanyListHeader from '../../organisms/company-list-header/company-list-
 import CompanyListSidebar from '../../organisms/company-list-sidebar/company-list-sidebar.jsx';
 
 const IntrnApp = React.createClass({
-  getInitialState: function() {
-    return ({
-      companies: CompanyStore.getAll()
-    });
-  },
 
   getDefaultProps: function() {
     return ({
-      sortableProps: ['name', 'rating', 'salary', 'classSize', 'length', 'difficulty']
+      defaultListProps: CompanyStore.getDefaultListProps()
+    });
+  },
+
+  getInitialState: function() {
+    return ({
+      companies: CompanyStore.getCompanies()
     });
   },
 
@@ -34,22 +35,33 @@ const IntrnApp = React.createClass({
 
   _onChange: function() {
     this.setState({
-      companies: CompanyStore.getAll()
+      companies: CompanyStore.getCompanies()
     });
   },
 
   render: function() {
+
+    let defaultProperty = this.props.defaultListProps.defaultProperty;
+    let defaultComparator = this.props.defaultListProps.defaultComparator;
+    let comparableProps = this.props.defaultListProps.comparableProps;
+
     return (
-      <div className="intrnApp">
-        <Header headerText='intrn' />
-        <div className="main">
-          <CompanyListHeader
-            sortableProps={this.props.sortableProps}/>
-          <CompanyList
-            companies={this.state.companies}
-            sortableProps={this.props.sortableProps} />
+      <div className='intrn-app'>
+        <Header headerText='app' />
+        <div className='container'>
+          <div className="sidebar-section">
+            <CompanyListSidebar />
+          </div>
+          <div className='list-section'>
+            <CompanyListHeader
+              defaultProperty={defaultProperty}
+              defaultComparator={defaultComparator}
+              comparableProps={comparableProps} />
+            <CompanyList
+              companies={this.state.companies}
+              comparableProps={comparableProps} />
+          </div>
         </div>
-        <CompanyListSidebar />
       </div>
     );
   }

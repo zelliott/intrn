@@ -13,13 +13,14 @@ const ListHeaderButton = React.createClass({
     action: React.PropTypes.func,
     text: React.PropTypes.string,
     active: React.PropTypes.bool,
+    property: React.PropTypes.string,
     comparator: React.PropTypes.bool
   },
 
   handleClick: function() {
     let active = this.props.active;
     let comparator = active ? ! this.props.comparator : true;
-    let property = this.props.text;
+    let property = this.props.property;
 
     this.props.action.call(this, property, comparator);
   },

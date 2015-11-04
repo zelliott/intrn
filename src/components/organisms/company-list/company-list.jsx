@@ -7,7 +7,7 @@ const CompanyList = React.createClass({
 
   propTypes: {
     companies: React.PropTypes.object,
-    sortableProps: React.PropTypes.arrayOf(React.PropTypes.string)
+    comparableProps: React.PropTypes.arrayOf(React.PropTypes.object)
   },
 
   getDefaultProps: function() {
@@ -18,9 +18,10 @@ const CompanyList = React.createClass({
 
   render: function() {
     let companies = _.map(this.props.companies, company => {
+      let comparableProperties = _.keys(this.props.comparableProps);
 
       // Define each company, but only keep the comparable properties.
-      company = _.pick(company, this.props.sortableProps);
+      company = _.pick(company, comparableProperties);
 
       return (
         <Company key={company.id}>
@@ -30,7 +31,9 @@ const CompanyList = React.createClass({
     });
 
     return (
-      <div>{companies}</div>
+      <div className='company-list'>
+        {companies}
+      </div>
     );
   }
 });
