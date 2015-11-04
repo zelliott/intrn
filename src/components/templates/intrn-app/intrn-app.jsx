@@ -1,10 +1,8 @@
 import './intrn-app.less';
 
 import React from 'react/addons';
-
 import AppActions from '../../../js/actions/app-actions';
 import CompanyStore from '../../../js/stores/company-store';
-
 import Header from '../../molecules/header/header.jsx';
 import CompanyList from '../../organisms/company-list/company-list.jsx';
 import CompanyListHeader from '../../organisms/company-list-header/company-list-header.jsx';
@@ -26,7 +24,7 @@ const IntrnApp = React.createClass({
   componentDidMount: function() {
     CompanyStore.addChangeListener(this._onChange);
 
-    // fetch the initial list of todos from the server
+    // Fetch the initial list of todos from the server
     AppActions.getCompanies();
   },
 
@@ -35,7 +33,9 @@ const IntrnApp = React.createClass({
   },
 
   _onChange: function() {
-    this.setState({ companies: CompanyStore.getAll() });
+    this.setState({
+      companies: CompanyStore.getAll()
+    });
   },
 
   render: function() {
@@ -44,7 +44,7 @@ const IntrnApp = React.createClass({
         <Header headerText='intrn' />
         <div className="main">
           <CompanyListHeader
-            sortableProps={this.props.sortableProps} />
+            sortableProps={this.props.sortableProps}/>
           <CompanyList
             companies={this.state.companies}
             sortableProps={this.props.sortableProps} />

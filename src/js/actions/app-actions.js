@@ -3,8 +3,10 @@ import AppDispatcher from '../dispatcher/app-dispatcher';
 import TodoApi from '../apis/todo-api';
 import CompanyApi from '../apis/company-api';
 
-/* Actions here perform two purposes: to send the appropriate action on to the
-dispatcher (which routes in on to the store), and to interface with the Api */
+/**
+ * Actions here perform two purposes: to send the appropriate action on to the
+ * dispatcher (which routes in on to the store), and to interface with the Api.
+ */
 const AppActions = {
 
   getCompanies: function() {
@@ -22,6 +24,14 @@ const AppActions = {
         actionType: AppConstants.GET_COMPANIES_FAIL,
         error: error
       });
+    });
+  },
+
+  sortCompanies: function(property, comparator) {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.SORT_COMPANIES,
+      property: property,
+      comparator: comparator
     });
   },
 

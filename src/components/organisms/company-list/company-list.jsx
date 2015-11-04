@@ -17,10 +17,10 @@ const CompanyList = React.createClass({
   },
 
   render: function() {
-    let companies = _.keys(this.props.companies).map(company_id => {
+    let companies = _.map(this.props.companies, company => {
 
       // Define each company, but only keep the comparable properties.
-      let company = _.pick(this.props.companies[company_id], this.props.sortableProps);
+      company = _.pick(company, this.props.sortableProps);
 
       return (
         <Company key={company.id}>
