@@ -4,18 +4,32 @@
 
   .container {
 
-    .sidebar-section,
-    .list-section {
+    .main-section,
+    .sidebar-section {
       display: inline-block;
       vertical-align: top;
     }
 
-    .sidebar-section {
-      width: @sidebar-width;
+    .main-section {
+      width: @main-width;
+
+      > div {
+        margin: 0 auto;
+        padding: 0 @main-inner-padding;
+        width: @main-inner-fixed-width;
+      }
+
+      .list-section {
+        margin-top: 40px;
+      }
     }
 
-    .list-section {
-      width: @list-width;
+    .sidebar-section {
+      background: @sidebar-bkg;
+      height: 100vh;
+      position: absolute;
+      right: 0;
+      width: @sidebar-width;
     }
   }
 }

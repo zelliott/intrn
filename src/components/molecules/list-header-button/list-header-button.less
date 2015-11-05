@@ -1,24 +1,52 @@
 @import '../../../stylesheets/common';
 
 .list-header {
-  .header-sort-button {
-    text-align: left;
-    width: 100px;
+
+  .button-section {
+    display: inline-block;
+    width: 120px;
   }
 
-  .wide-button {
+  .wide-button-section {
     width: 150px;
   }
 
-  .active {
+  .header-sort-button {
+    border-radius: 5px;
+    color: #999;
+    font-size: 16px;
+    text-align: left;
+    padding: 5px 10px;
 
+    > i {
+      display: none;
+      vertical-align: top;
+    }
+
+    &:hover {
+      background: #eee;
+    }
+  }
+
+  .active {
+    border-bottom: 3px solid @dark-blue;
+    background: @blue;
+    color: #fff;
+
+    &:hover {
+      background: @blue;
+    }
   }
 
   .asc {
-
+   > .down {
+     display: inline-block;
+   }
   }
 
   .desc {
-
+    > .up {
+      display: inline-block;
+    }
   }
 }

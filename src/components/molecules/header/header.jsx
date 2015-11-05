@@ -11,8 +11,12 @@ var Header = React.createClass({
 
   render: function() {
     return (
-      <div className="header">
-        <h1>{this.props.headerText}</h1>
+      <div className='header'>
+        <div className='logo'>Logo</div>
+        <div className='header-links'>
+          <div><i className='material-icons'>view_agenda</i> The List</div>
+          <div><i className='material-icons'>trending_up</i>Trends</div>
+        </div>
       </div>
     );
   }

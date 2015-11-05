@@ -15,8 +15,6 @@ var Company = React.createClass({
         <div>{company.funness}</div>
         <div>{company.perks}</div>
         <div>{company.difficulty}</div>
-        <div>{company.classSize}</div>
-        <div>{company.length}</div>
       </div>
     );
   }

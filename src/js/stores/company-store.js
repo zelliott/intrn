@@ -9,7 +9,7 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let _companies = [];
-let _defaultProperty = 'name';
+let _defaultProperty = 'rating';
 let _defaultComparator = true;
 let _comparableProps = {
   rating: 'Rating',
@@ -17,9 +17,7 @@ let _comparableProps = {
   salary: 'Salary',
   funness: 'Funness',
   perks: 'Perks',
-  difficulty: 'Difficulty',
-  classSize: 'Class Size',
-  length: 'Length'
+  difficulty: 'Difficulty'
 };
 
 function createCompanies(companies) {

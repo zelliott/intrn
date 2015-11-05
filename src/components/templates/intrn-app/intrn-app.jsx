@@ -47,19 +47,21 @@ const IntrnApp = React.createClass({
 
     return (
       <div className='intrn-app'>
-        <Header headerText='app' />
         <div className='container'>
-          <div className="sidebar-section">
-            <CompanyListSidebar />
+          <div className='main-section'>
+            <Header headerText='app' />
+            <div className='list-section'>
+              <CompanyListHeader
+                defaultProperty={defaultProperty}
+                defaultComparator={defaultComparator}
+                comparableProps={comparableProps} />
+              <CompanyList
+                companies={this.state.companies}
+                comparableProps={comparableProps} />
+            </div>
           </div>
-          <div className='list-section'>
-            <CompanyListHeader
-              defaultProperty={defaultProperty}
-              defaultComparator={defaultComparator}
-              comparableProps={comparableProps} />
-            <CompanyList
-              companies={this.state.companies}
-              comparableProps={comparableProps} />
+          <div className='sidebar-section'>
+            <CompanyListSidebar />
           </div>
         </div>
       </div>

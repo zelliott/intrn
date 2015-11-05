@@ -1,1 +1,36 @@
 @import '../../../stylesheets/common';
+
+.header {
+  // background: @header-bkg;
+  // border-bottom: 1px solid #eee;
+  // box-shadow: 0 0 2px rgba(0,0,0,.2);
+  height: @header-height;
+  font-size: 18px;
+
+  > div {
+    display: inline-block;
+    line-height: @header-height;
+    vertical-align: top;
+  }
+
+  .logo {
+
+  }
+
+  .header-links {
+    color: #999;
+    margin-left: 40px;
+
+    > div {
+      display: inline-block;
+      margin-left: 40px;
+      vertical-align: top;
+
+      > i {
+        font-size: 20px;
+        margin: -4px 10px 0 0;
+        vertical-align: middle;
+      }
+    }
+  }
+}

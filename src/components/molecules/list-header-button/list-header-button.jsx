@@ -39,6 +39,8 @@ const ListHeaderButton = React.createClass({
         className={classes}
         onClick={this.handleClick}>
         {this.props.text}
+        <i className='material-icons down'>arrow_drop_down</i>
+        <i className='material-icons up'>arrow_drop_up</i>
       </button>
     );
   }

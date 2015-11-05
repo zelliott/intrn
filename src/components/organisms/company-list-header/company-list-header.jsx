@@ -42,19 +42,21 @@ const CompanyListHeader = React.createClass({
       let isName = p === 'name';
 
       let classes = React.addons.classSet({
-        'header-sort-button': true,
-        'wide-button': isName
+        'button-section': true,
+        'wide-button-section': isName
       });
 
       return (
-        <ListHeaderButton
-          className={classes}
-          key={i}
-          active={active}
-          property={p}
-          comparator={comparator}
-          action={this._onChange}
-          text={this.props.comparableProps[p]} />
+        <div className={classes}>
+          <ListHeaderButton
+            className='header-sort-button'
+            key={i}
+            active={active}
+            property={p}
+            comparator={comparator}
+            action={this._onChange}
+            text={this.props.comparableProps[p]} />
+          </div>
       );
     });
 
