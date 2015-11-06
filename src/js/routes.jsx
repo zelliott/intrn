@@ -15,6 +15,7 @@ var routes = (
     <DefaultRoute name = 'intrn-app' handler={IntrnApp} />
     <Route name='todo-app' handler={TodoApp} />
     <Route name='about' path='/about' handler={About} />
+    <Route name='trends' path='/trends' handler={About} />
     <NotFoundRoute handler={TodoApp} />
   </Route>
 );

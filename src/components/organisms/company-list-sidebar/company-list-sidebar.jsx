@@ -14,7 +14,7 @@ const CompanyListSidebar = React.createClass({
   },
 
   /**
-   * This `_.cloneDeep` seems very much like an anti-pattern to me
+   * FIXME: This `_.cloneDeep` seems very much like an anti-pattern to me
    */
   getInitialState: function() {
     return ({
@@ -48,6 +48,9 @@ const CompanyListSidebar = React.createClass({
     AppActions.updateFilters(this.state.filters);
   },
 
+  /**
+   * TODO: Need to divide logic for RangeFilters and ValueFilters.
+   */
   render: function() {
     let filters = _.map(this.state.filters, (filter, property) => {
       return (

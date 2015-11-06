@@ -14,8 +14,12 @@ var Header = React.createClass({
       <div className='header'>
         <div className='logo'>Logo</div>
         <div className='header-links'>
-          <div><i className='material-icons'>view_agenda</i> The List</div>
-          <div><i className='material-icons'>trending_up</i>Trends</div>
+          <Link to='app'>
+            <i className='material-icons'>view_agenda</i> The List
+          </Link>
+          <Link to='trends'>
+            <i className='material-icons'>trending_up</i>Trends
+          </Link>
         </div>
       </div>
     );

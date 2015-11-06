@@ -17,6 +17,10 @@ const SidebarFilter = React.createClass({
     });
   },
 
+  /**
+   * FIXME: Perhaps combine `_onMinChange` and `_onMaxChange` into a single
+   * handler.
+   */
   _onMinChange: function(event) {
     let updatedFilter = {
       type: this.props.filter.type,
@@ -46,7 +50,6 @@ const SidebarFilter = React.createClass({
   },
 
   render: function() {
-
     return (
       <div>
         <div>{this.props.property}</div>
