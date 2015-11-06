@@ -34,7 +34,7 @@ const ListHeaderButton = React.createClass({
       desc: active && !this.props.comparator
     });
 
-    return(
+    return (
       <button
         className={classes}
         onClick={this.handleClick}>

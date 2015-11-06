@@ -18,7 +18,8 @@ const IntrnApp = React.createClass({
 
   getInitialState: function() {
     return ({
-      companies: CompanyStore.getCompanies()
+      companies: CompanyStore.getCompanies(),
+      filters: CompanyStore.getFilters()
     });
   },
 
@@ -61,7 +62,8 @@ const IntrnApp = React.createClass({
             </div>
           </div>
           <div className='sidebar-section'>
-            <CompanyListSidebar />
+            <CompanyListSidebar
+              filters={this.state.filters} />
           </div>
         </div>
       </div>

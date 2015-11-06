@@ -1,0 +1,27 @@
+@import '../../../stylesheets/common';
+
+.sidebar-section {
+
+  button {
+    background: @green;
+    border-bottom: 3px solid @dark-green;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 20px;
+
+    > i {
+      font-size: 20px;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    &.disabled {
+      background: #666;
+      border-bottom-width: 0px;
+      color: #222;
+      cursor: default;
+    }
+  }
+}

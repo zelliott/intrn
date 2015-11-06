@@ -20,6 +20,22 @@ let _comparableProps = {
   difficulty: 'Difficulty'
 };
 
+const RANGE_FILTER = 'RangeFilter';
+const VALUE_FILTER = 'ValueFilter';
+const DEFAULT_RANGE_FILTER = {
+  type: RANGE_FILTER,
+  max: Infinity,
+  min: -Infinity
+};
+
+let _filters = {
+  rating: DEFAULT_RANGE_FILTER,
+  salary: DEFAULT_RANGE_FILTER,
+  funness: DEFAULT_RANGE_FILTER,
+  perks: DEFAULT_RANGE_FILTER,
+  difficulty: DEFAULT_RANGE_FILTER
+};
+
 function createCompanies(companies) {
   _companies = companies;
 
@@ -34,6 +50,31 @@ function sortCompanies(property, comparator) {
   let order = comparator ? 'asc' : 'desc';
 
   _companies = _.sortByOrder(_companies, property, order);
+}
+
+function filterCompanies() {
+  return _.filter(_companies, company => {
+    let filtered = true;
+
+    _.each(_.keys(company), prop => {
+      let propFilter = _filters[prop];
+      let propValue = company[prop];
+      let filterExists = !_.isUndefined(propFilter);
+
+      if (filterExists && propFilter.type === RANGE_FILTER) {
+        if (propValue > propFilter.max || propValue < propFilter.min) {
+          filtered = false;
+          return;
+        }
+      }
+    });
+
+    return filtered;
+  });
+}
+
+function updateFilters(filters) {
+  _filters = filters;
 }
 
 /**
@@ -59,7 +100,9 @@ const CompanyStore = assign({}, EventEmitter.prototype, {
   },
 
   getCompanies: function() {
-    return _companies;
+    let filteredCompanies = filterCompanies();
+
+    return filteredCompanies;
   },
 
   getDefaultListProps: function() {
@@ -68,6 +111,10 @@ const CompanyStore = assign({}, EventEmitter.prototype, {
       defaultComparator: _defaultComparator,
       comparableProps: _comparableProps
     };
+  },
+
+  getFilters: function() {
+    return _filters;
   }
 });
 
@@ -88,6 +135,11 @@ AppDispatcher.register( payload => {
 
     case AppConstants.SORT_COMPANIES:
       sortCompanies(action.property, action.comparator)
+      CompanyStore.emitChange();
+      break;
+
+    case AppConstants.UPDATE_FILTERS:
+      updateFilters(action.filters);
       CompanyStore.emitChange();
       break;
 

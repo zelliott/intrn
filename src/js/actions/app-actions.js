@@ -35,6 +35,13 @@ const AppActions = {
     });
   },
 
+  updateFilters: function(filters) {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.UPDATE_FILTERS,
+      filters: filters
+    });
+  },
+
   addTodo: function(todo) {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.ADD_TODO,
