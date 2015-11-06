@@ -1,7 +1,7 @@
 import './company-list-sidebar.less';
 import AppActions from '../../../js/actions/app-actions';
 import Button from '../../atoms/button/button.jsx';
-import SidebarFilter from '../../molecules/sidebar-filter/sidebar-filter.jsx';
+import SidebarRangeFilter from '../../molecules/sidebar-range-filter/sidebar-range-filter.jsx';
 import CompanyStore from '../../../js/stores/company-store';
 
 import React from 'react/addons';
@@ -10,7 +10,8 @@ import 'lodash';
 const CompanyListSidebar = React.createClass({
 
   propTypes: {
-    filters: React.PropTypes.object
+    filters: React.PropTypes.object,
+    filterableProps: React.PropTypes.object
   },
 
   /**
@@ -24,13 +25,18 @@ const CompanyListSidebar = React.createClass({
   },
 
   /**
-   * This is called whenever any one of the internal <SidebarFilter>
+   * This is called whenever any one of the internal <SidebarRangeFilter>
    * elements changes.
    */
-  _onFilterChange: function(property, filter) {
+  _onRangeFilterChange: function(property, min, max) {
     let updatedFilters = this.state.filters;
 
-    updatedFilters[property] = filter;
+    updatedFilters[property] = {
+      type: 'RangeFilter',
+      min: min,
+      max: max
+    };
+
     this.setState({
       filters: updatedFilters,
       updatedState: this.state.filters === this.props.filters
@@ -48,16 +54,17 @@ const CompanyListSidebar = React.createClass({
     AppActions.updateFilters(this.state.filters);
   },
 
-  /**
-   * TODO: Need to divide logic for RangeFilters and ValueFilters.
-   */
   render: function() {
     let filters = _.map(this.state.filters, (filter, property) => {
       return (
-        <SidebarFilter
-          property={property}
-          filter={filter}
-          action={this._onFilterChange} />
+        <div className='sidebar-filter'>
+          <div className='filter-name'>{this.props.filterableProps[property]}</div>
+          <SidebarRangeFilter
+            property={property}
+            min={filter.min}
+            max={filter.max}
+            action={this._onRangeFilterChange} />
+        </div>
       );
     });
 

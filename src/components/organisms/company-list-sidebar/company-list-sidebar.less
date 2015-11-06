@@ -1,6 +1,70 @@
 @import '../../../stylesheets/common';
 
 .sidebar-section {
+  border-left: 1px solid #eee;
+
+  .sidebar-filter {
+    margin: 20px;
+
+    .filter-name {
+      color: #bbb;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .range-filter {
+      position: relative;
+
+      .range {
+        background: #eee;
+        border: none;
+        height: 5px;
+
+        .ui-slider-handle {
+          border: none;
+          border-radius: 50px;
+          background: @blue;
+          height: 15px;
+          width: 15px;
+          outline: none;
+        }
+
+        .ui-slider-range {
+          background: @blue;
+        }
+      }
+
+      .min,
+      .max {
+        color: #666;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+
+      .min {
+        float: left;
+      }
+
+      .max {
+        float: right;
+      }
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+      content: "";
+      display: table;
+    }
+
+    .clearfix:after {
+      clear: both;
+    }
+
+    .clearfix {
+      zoom: 1; /* ie 6/7 */
+    }
+  }
 
   button {
     background: @green;
@@ -18,9 +82,9 @@
     }
 
     &.disabled {
-      background: #666;
+      background: #ccc;
       border-bottom-width: 0px;
-      color: #222;
+      color: #fff;
       cursor: default;
     }
   }

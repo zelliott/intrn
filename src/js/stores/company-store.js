@@ -19,6 +19,14 @@ let _comparableProps = {
   perks: 'Perks',
   difficulty: 'Difficulty'
 };
+let _filterableProps = {
+  rating: 'Rating',
+  name: 'Name',
+  salary: 'Salary',
+  funness: 'Funness',
+  perks: 'Perks',
+  difficulty: 'Difficulty'
+};
 
 const RANGE_FILTER = 'RangeFilter';
 const VALUE_FILTER = 'ValueFilter';
@@ -109,7 +117,8 @@ const CompanyStore = assign({}, EventEmitter.prototype, {
     return {
       defaultProperty: _defaultProperty,
       defaultComparator: _defaultComparator,
-      comparableProps: _comparableProps
+      comparableProps: _comparableProps,
+      filterableProps: _filterableProps
     };
   },
 

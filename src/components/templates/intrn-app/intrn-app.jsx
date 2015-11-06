@@ -45,6 +45,7 @@ const IntrnApp = React.createClass({
     let defaultProperty = this.props.defaultListProps.defaultProperty;
     let defaultComparator = this.props.defaultListProps.defaultComparator;
     let comparableProps = this.props.defaultListProps.comparableProps;
+    let filterableProps = this.props.defaultListProps.filterableProps;
 
     return (
       <div className='intrn-app'>
@@ -63,7 +64,8 @@ const IntrnApp = React.createClass({
           </div>
           <div className='sidebar-section'>
             <CompanyListSidebar
-              filters={this.state.filters} />
+              filters={this.state.filters}
+              filterableProps={filterableProps} />
           </div>
         </div>
       </div>
