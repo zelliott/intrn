@@ -57,6 +57,7 @@ let _filters = {
   //   }]
   // }
 };
+let _searchFilter = '';
 
 function createCompanies(companies) {
   _companies = companies;
@@ -77,6 +78,11 @@ function sortCompanies(property, comparator) {
 function filterCompanies() {
   return _.filter(_companies, company => {
     let filtered = true;
+
+    if (_searchFilter.length > 0 &&
+      !_.startsWith(company['name'], _searchFilter)) {
+        return false;
+      }
 
     _.each(_.keys(company), prop => {
       let propFilter = _filters[prop];
@@ -112,6 +118,10 @@ function filterCompanies() {
 
 function updateFilters(filters) {
   _filters = filters;
+}
+
+function updateSearchFilter(searchFilter) {
+  _searchFilter = searchFilter;
 }
 
 /**
@@ -173,6 +183,11 @@ AppDispatcher.register( payload => {
 
     case AppConstants.SORT_COMPANIES:
       sortCompanies(action.property, action.comparator)
+      CompanyStore.emitChange();
+      break;
+
+    case AppConstants.UPDATE_SEARCH_FILTER:
+      updateSearchFilter(action.value);
       CompanyStore.emitChange();
       break;
 

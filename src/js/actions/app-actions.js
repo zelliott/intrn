@@ -35,6 +35,13 @@ const AppActions = {
     });
   },
 
+  updateSearchFilter: function(value) {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.UPDATE_SEARCH_FILTER,
+      value: value
+    });
+  },
+
   updateFilters: function(filters) {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.UPDATE_FILTERS,

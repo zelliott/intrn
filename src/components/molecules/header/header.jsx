@@ -2,6 +2,7 @@ import './header.less';
 
 import React from 'react/addons';
 import {Link} from 'react-router';
+import SearchFilter from '../search-filter/search-filter.jsx';
 
 var Header = React.createClass({
 
@@ -21,6 +22,7 @@ var Header = React.createClass({
             <i className='material-icons'>trending_up</i>Trends
           </Link>
         </div>
+        <SearchFilter />
       </div>
     );
   }
