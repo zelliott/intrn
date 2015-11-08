@@ -28,14 +28,10 @@ const CompanyListSidebar = React.createClass({
    * This is called whenever any one of the internal <SidebarRangeFilter>
    * elements changes.
    */
-  _onRangeFilterChange: function(property, min, max) {
+  _onRangeFilterChange: function(property, values) {
     let updatedFilters = this.state.filters;
 
-    updatedFilters[property] = {
-      type: 'RangeFilter',
-      min: min,
-      max: max
-    };
+    updatedFilters[property].values = values;
 
     this.setState({
       filters: updatedFilters,
@@ -61,22 +57,23 @@ const CompanyListSidebar = React.createClass({
           <div className='filter-name'>{this.props.filterableProps[property]}</div>
           <SidebarRangeFilter
             property={property}
-            min={filter.min}
-            max={filter.max}
+            values={filter.values}
+            range={filter.range}
+            step={filter.step}
             action={this._onRangeFilterChange} />
         </div>
       );
     });
 
     let classes = React.addons.classSet({
-      'update-filters': true,
+      'update-filters-button': true,
       disabled: this.state.updatedState,
     });
 
     return (
       <div>
         <div className='filters'>{filters}</div>
-        <div>
+        <div className='update-filters'>
           <Button
             className={classes}
             text='Filter list'

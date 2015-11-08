@@ -9,6 +9,8 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let _companies = [];
+let _rolesOfCompanies = [];
+
 let _defaultProperty = 'rating';
 let _defaultComparator = true;
 let _comparableProps = {
@@ -20,7 +22,6 @@ let _comparableProps = {
   difficulty: 'Difficulty'
 };
 let _filterableProps = {
-  rating: 'Rating',
   name: 'Name',
   salary: 'Salary',
   funness: 'Funness',
@@ -30,18 +31,31 @@ let _filterableProps = {
 
 const RANGE_FILTER = 'RangeFilter';
 const VALUE_FILTER = 'ValueFilter';
-const DEFAULT_RANGE_FILTER = {
+let DEFAULT_RANGE_FILTER = {
   type: RANGE_FILTER,
-  max: Infinity,
-  min: -Infinity
+  range: [0, 100],
+  values: [0, 100],
+  step: 1
+};
+let SALARY_RANGE_FILTER = {
+  type: RANGE_FILTER,
+  range: [0, 10000],
+  values: [0, 10000],
+  step: 100
 };
 
+// FIXME: God this fucking `_.clone` BS is such an anti-pattern...
 let _filters = {
-  rating: DEFAULT_RANGE_FILTER,
-  salary: DEFAULT_RANGE_FILTER,
-  funness: DEFAULT_RANGE_FILTER,
-  perks: DEFAULT_RANGE_FILTER,
-  difficulty: DEFAULT_RANGE_FILTER
+  salary: SALARY_RANGE_FILTER,
+  funness: _.clone(DEFAULT_RANGE_FILTER),
+  perks: _.clone(DEFAULT_RANGE_FILTER),
+  difficulty: _.clone(DEFAULT_RANGE_FILTER),
+  // roles: {
+  //   type: VALUE_FILTER,
+  //   values: [{
+  //     'Software Engineering Intern': 0
+  //   }]
+  // }
 };
 
 function createCompanies(companies) {
@@ -70,7 +84,22 @@ function filterCompanies() {
       let filterExists = !_.isUndefined(propFilter);
 
       if (filterExists && propFilter.type === RANGE_FILTER) {
-        if (propValue > propFilter.max || propValue < propFilter.min) {
+        if (propValue > propFilter.values[1] || propValue < propFilter.values[0]) {
+          filtered = false;
+          return;
+        }
+      } else if (filterExists && propFilter.type === VALUE_FILTER) {
+        let value_filtered = false;
+
+        if (_.isArray(propValue)) {
+          _.each(propValue, value => {
+            if (propFilter.values[value] == 1) {
+              value_filtered = true;
+            }
+          });
+        }
+
+        if (!value_filtered) {
           filtered = false;
           return;
         }

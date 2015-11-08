@@ -13,9 +13,9 @@ const CompanySchema = new Schema({
   classSize: Number,
   length: Number,
   difficulty: Number,
-  positions: [{
+  roles: [{
     type: Schema.ObjectId,
-    ref: 'Position'
+    ref: 'Role'
   }]
 });
 

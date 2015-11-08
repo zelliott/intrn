@@ -42,6 +42,24 @@ const AppActions = {
     });
   },
 
+  getRoles: function() {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.GET_ROLES
+    });
+
+    RoleApi.getAll( (companies) => {
+      AppDispatcher.handleServerAction({
+        actionType: AppConstants.GET_ROLES_SUCCESS,
+        roles: roles
+      });
+    }, (error) => {
+      AppDispatcher.handleServerAction({
+        actionType: AppConstants.GET_ROLES_FAIL,
+        error: error
+      });
+    });
+  },
+
   addTodo: function(todo) {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.ADD_TODO,

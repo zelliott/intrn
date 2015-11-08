@@ -1,3 +1,5 @@
+@import '../../../stylesheets/common';
+
 .company {
   border-radius: 5px;
   color: #555;
@@ -8,13 +10,29 @@
     // background: #eee;
   }
 
-  div {
+  > div {
     display: inline-block;
     width: 100px;
     padding: 0 10px;
+    height: 30px;
+    vertical-align: top;
+  }
+
+  .data-text {
+    line-height: 30px;
+  }
+
+  .company-rating {
+    color: #aaa;
+    font-weight: 600;
+    text-align: center;
   }
 
   .company-name {
     width: 130px;
+  }
+
+  .company-salary {
+    font-weight: 600;
   }
 }

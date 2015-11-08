@@ -1,10 +1,16 @@
 {
-  "rating": 1,
-  "name": "Google",
-  "salary": 7400,
-  "funness": 20,
-  "perks": 16,
-  "difficulty": 50,
-  "classSize": 300,
-  "length": 80
+  "rating": 3,
+  "name": "Box",
+  "salary": 7200,
+  "funness": 80,
+  "perks": 28,
+  "difficulty": 40,
+  "classSize": 30,
+  "length": 75,
+  "roles": [
+    {
+      "id": 1,
+      "name": "Software Engineering Intern"
+    }
+  ]
 }

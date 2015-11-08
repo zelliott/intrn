@@ -26,5 +26,6 @@ app.use('/', require('./public/main'));
 // all of our API routes will prefixed with /api
 app.use('/api', require('./api/todos'));
 app.use('/api', require('./api/companies'));
+app.use('/api', require('./api/roles'));
 
 export default app;

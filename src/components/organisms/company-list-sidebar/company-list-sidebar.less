@@ -4,7 +4,7 @@
   border-left: 1px solid #eee;
 
   .sidebar-filter {
-    margin: 20px;
+    margin: 25px;
 
     .filter-name {
       color: #bbb;
@@ -19,15 +19,21 @@
       .range {
         background: #eee;
         border: none;
+        cursor: pointer;
         height: 5px;
 
         .ui-slider-handle {
           border: none;
           border-radius: 50px;
           background: @blue;
+          cursor: pointer;
           height: 15px;
           width: 15px;
           outline: none;
+
+          &:hover {
+            background: @dark-blue;
+          }
         }
 
         .ui-slider-range {
@@ -66,26 +72,30 @@
     }
   }
 
-  button {
-    background: @green;
-    border-bottom: 3px solid @dark-green;
-    border-radius: 5px;
-    color: #fff;
-    font-weight: 600;
-    font-size: 16px;
-    padding: 10px 20px;
+  .update-filters {
+    margin: 25px;
 
-    > i {
-      font-size: 20px;
-      vertical-align: middle;
-      margin-left: 10px;
-    }
-
-    &.disabled {
-      background: #ccc;
-      border-bottom-width: 0px;
+    .update-filters-button {
+      background: @green;
+      border-bottom: 3px solid @dark-green;
+      border-radius: 5px;
       color: #fff;
-      cursor: default;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 20px;
+
+      > i {
+        font-size: 20px;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+
+      &.disabled {
+        background: #ccc;
+        border-bottom-width: 0px;
+        color: #fff;
+        cursor: default;
+      }
     }
   }
 }

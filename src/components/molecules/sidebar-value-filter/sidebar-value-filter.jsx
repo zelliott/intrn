@@ -1,9 +1,9 @@
-import './sidebar-range-filter.less';
+import './sidebar-value-filter.less';
 import React from 'react/addons';
 import $ from 'jquery';
 import 'jquery-ui';
 
-const SidebarRangeFilter = React.createClass({
+const SidebarValueFilter = React.createClass({
 
   propTypes: {
     action: React.PropTypes.func,
@@ -61,4 +61,4 @@ const SidebarRangeFilter = React.createClass({
   }
 });
 
-export default SidebarRangeFilter;
+export default SidebarValueFilter;
