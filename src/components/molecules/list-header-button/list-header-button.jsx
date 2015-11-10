@@ -35,6 +35,7 @@ const ListHeaderButton = React.createClass({
     });
 
     return (
+
       <button
         className={classes}
         onClick={this.handleClick}>

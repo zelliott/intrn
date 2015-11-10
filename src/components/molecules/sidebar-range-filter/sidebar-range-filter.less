@@ -1,0 +1,60 @@
+@import '../../../stylesheets/common';
+
+.range-filter {
+  position: relative;
+
+  .range {
+    background: #eee;
+    border: none;
+    cursor: pointer;
+    height: 10px;
+
+    .ui-slider-handle {
+      border: none;
+      border-radius: 50px;
+      background: @dark-blue;
+      cursor: pointer;
+      height: 10px;
+      width: 10px;
+      top: 0px;
+      outline: none;
+
+      &:hover {
+        background: @dark-blue;
+      }
+    }
+
+    .ui-slider-range {
+      background: @blue;
+    }
+  }
+
+  .min,
+  .max {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .min {
+    float: left;
+  }
+
+  .max {
+    float: right;
+  }
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+.clearfix {
+  zoom: 1; /* ie 6/7 */
+}

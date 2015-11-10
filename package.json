@@ -79,6 +79,7 @@
     "node-libs-browser": "0.5.2",
     "object-assign": "2.1.1",
     "postcss-loader": "0.5.1",
+    "rc-tooltip": "^3.2.0",
     "react": "0.13.3",
     "react-router": "0.13.3",
     "require-dir": "0.3.0",
