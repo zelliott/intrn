@@ -7,6 +7,7 @@ import Header from '../../molecules/header/header.jsx';
 import CompanyList from '../../organisms/company-list/company-list.jsx';
 import CompanyListHeader from '../../organisms/company-list-header/company-list-header.jsx';
 import CompanyListSidebar from '../../organisms/company-list-sidebar/company-list-sidebar.jsx';
+import Modal from '../../organisms/modal/modal.jsx';
 
 const IntrnApp = React.createClass({
 
@@ -49,6 +50,9 @@ const IntrnApp = React.createClass({
 
     return (
       <div className='intrn-app'>
+
+        <Modal></Modal>
+
         <div className='container'>
           <div className='main-section'>
             <Header headerText='app' />

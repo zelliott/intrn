@@ -1,6 +1,7 @@
 import './header.less';
 
 import React from 'react/addons';
+import Button from '../../atoms/button/button.jsx'
 import {Link} from 'react-router';
 import SearchFilter from '../search-filter/search-filter.jsx';
 
@@ -10,10 +11,13 @@ var Header = React.createClass({
     headerText: React.PropTypes.string
   },
 
+  showAddCompanyModal: function() {
+
+  },
+
   render: function() {
     return (
       <div className='header'>
-        <div className='logo'>Logo</div>
         <div className='header-links'>
           <Link to='app' className='the-list-link'>
             <i className='material-icons'>view_agenda</i> The List
@@ -22,7 +26,15 @@ var Header = React.createClass({
             <i className='material-icons'>trending_up</i>Trends
           </Link>
         </div>
-        <SearchFilter />
+        <div className='header-actions'>
+          <Button className='add-company'
+            action={this.showAddCompanyModal}
+            icon='add' />
+          <SearchFilter />
+        </div>
+        <div className='logo'>
+          intrn
+        </div>
       </div>
     );
   }

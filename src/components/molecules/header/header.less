@@ -1,29 +1,24 @@
 @import '../../../stylesheets/common';
 
 .header {
-  // background: @header-bkg;
-  // border-bottom: 1px solid #eee;
-  // box-shadow: 0 0 2px rgba(0,0,0,.2);
   height: @header-height;
-  font-size: 18px;
+  font-size: 16px;
 
   > div {
-    display: inline-block;
-    line-height: @header-height;
-    vertical-align: top;
+    line-height: @header-height - 1;
   }
 
   .logo {
-
+    text-align: center;
   }
 
   .header-links {
     color: #999;
-    margin-left: 40px;
+    float: left;
 
     > a {
       display: inline-block;
-      margin-left: 40px;
+      margin-right: 40px;
       vertical-align: top;
 
       > i {
@@ -46,6 +41,27 @@
     .trends-link {
       &:hover {
         color: @purple;
+      }
+    }
+  }
+
+  .header-actions {
+    color: #999;
+    float: right;
+
+    .add-company {
+      display: inline-block;
+      line-height: @header-height;
+      margin-right: 40px;
+      vertical-align: top;
+
+      > i {
+        line-height: inherit;
+        vertical-align: top;
+      }
+
+      &:hover {
+        color: #666;
       }
     }
   }
