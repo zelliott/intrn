@@ -6,23 +6,11 @@ import Company from '../../molecules/company/company.jsx';
 const CompanyList = React.createClass({
 
   propTypes: {
-    companies: React.PropTypes.object,
-    comparableProps: React.PropTypes.arrayOf(React.PropTypes.object)
-  },
-
-  getDefaultProps: function() {
-    return {
-      companies: {}
-    };
+    companies: React.PropTypes.array,
   },
 
   render: function() {
     let companies = _.map(this.props.companies, company => {
-      let comparableProperties = _.keys(this.props.comparableProps);
-
-      // Define each company, but only keep the comparable properties.
-      company = _.pick(company, comparableProperties);
-
       return (
         <Company key={company.id}>
           {company}

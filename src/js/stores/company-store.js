@@ -1,5 +1,8 @@
 import AppDispatcher from '../dispatcher/app-dispatcher';
 import AppConstants from '../constants/app-constants';
+import FilterStore from './filter-store';
+import SortStore from './sort-store';
+import SearchStore from './search-store';
 import {EventEmitter} from 'events';
 import 'lodash';
 
@@ -9,103 +12,30 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let _companies = [];
-let _rolesOfCompanies = [];
-
-let _defaultProperty = 'rating';
-let _defaultComparator = true;
-let _comparableProps = {
-  rating: 'Rating',
-  name: 'Name',
-  salary: 'Salary',
-  funness: 'Funness',
-  perks: 'Perks',
-  difficulty: 'Difficulty'
-};
-let _filterableProps = {
-  name: 'Name',
-  salary: 'Salary',
-  funness: 'Funness',
-  perks: 'Perks',
-  difficulty: 'Difficulty'
-};
-
-const RANGE_FILTER = 'RangeFilter';
-const VALUE_FILTER = 'ValueFilter';
-let DEFAULT_RANGE_FILTER = {
-  type: RANGE_FILTER,
-  range: [0, 100],
-  values: [0, 100],
-  step: 1
-};
-let SALARY_RANGE_FILTER = {
-  type: RANGE_FILTER,
-  range: [0, 10000],
-  values: [0, 10000],
-  step: 100
-};
-
-// FIXME: God this fucking `_.clone` BS is such an anti-pattern...
-let _filters = {
-  salary: SALARY_RANGE_FILTER,
-  funness: _.clone(DEFAULT_RANGE_FILTER),
-  perks: _.clone(DEFAULT_RANGE_FILTER),
-  difficulty: _.clone(DEFAULT_RANGE_FILTER),
-  // roles: {
-  //   type: VALUE_FILTER,
-  //   values: [{
-  //     'Software Engineering Intern': 0
-  //   }]
-  // }
-};
-let _searchFilter = '';
 
 function createCompanies(companies) {
   _companies = companies;
 
-  _.each(_companies, (company) => {
+  _.each(_companies, company => {
     company.synced = true;
   });
-
-  sortCompanies(_defaultProperty, _defaultComparator);
 }
 
-function sortCompanies(property, comparator) {
-  let order = comparator ? 'asc' : 'desc';
-
-  _companies = _.sortByOrder(_companies, property, order);
-}
-
-function filterCompanies() {
-  return _.filter(_companies, company => {
+function getCompanies(filters, sorts, search) {
+  let companies = _.filter(_companies, company => {
     let filtered = true;
 
-    if (_searchFilter.length > 0 &&
-      !_.startsWith(company['name'], _searchFilter)) {
-        return false;
-      }
+    if (search.length > 0 && !_.startsWith(company.name, search)) {
+      return false;
+    }
 
-    _.each(_.keys(company), prop => {
-      let propFilter = _filters[prop];
-      let propValue = company[prop];
-      let filterExists = !_.isUndefined(propFilter);
+    _.each(_.keys(company), name => {
+      let filter = filters[name];
+      let companyValue = company[name];
+      let filterExists = !_.isUndefined(filter);
 
-      if (filterExists && propFilter.type === RANGE_FILTER) {
-        if (propValue > propFilter.values[1] || propValue < propFilter.values[0]) {
-          filtered = false;
-          return;
-        }
-      } else if (filterExists && propFilter.type === VALUE_FILTER) {
-        let value_filtered = false;
-
-        if (_.isArray(propValue)) {
-          _.each(propValue, value => {
-            if (propFilter.values[value] == 1) {
-              value_filtered = true;
-            }
-          });
-        }
-
-        if (!value_filtered) {
+      if (filterExists) {
+        if (companyValue > filter.values[1] || companyValue < filter.values[0]) {
           filtered = false;
           return;
         }
@@ -114,14 +44,22 @@ function filterCompanies() {
 
     return filtered;
   });
-}
 
-function updateFilters(filters) {
-  _filters = filters;
-}
+  let sortName;
+  let sortDirection;
 
-function updateSearchFilter(searchFilter) {
-  _searchFilter = searchFilter;
+  _.each(sorts, (sort, key) => {
+    if (sort.active) {
+      sortName = sort.name;
+      sortDirection = sort.direction;
+    }
+  });
+
+  let direction = sortDirection ? 'asc' : 'desc';
+
+  companies = _.sortByOrder(companies, sortName, direction);
+
+  return companies;
 }
 
 /**
@@ -147,23 +85,12 @@ const CompanyStore = assign({}, EventEmitter.prototype, {
   },
 
   getCompanies: function() {
-    let filteredCompanies = filterCompanies();
+    let filters = FilterStore.getFilters();
+    let sorts = SortStore.getSorts();
+    let search = SearchStore.getSearch();
 
-    return filteredCompanies;
+    return getCompanies(filters, sorts, search);
   },
-
-  getDefaultListProps: function() {
-    return {
-      defaultProperty: _defaultProperty,
-      defaultComparator: _defaultComparator,
-      comparableProps: _comparableProps,
-      filterableProps: _filterableProps
-    };
-  },
-
-  getFilters: function() {
-    return _filters;
-  }
 });
 
 /**
@@ -171,28 +98,20 @@ const CompanyStore = assign({}, EventEmitter.prototype, {
  * actions. This should be the sole way in which a client side model gets updated.
  * Store listens to actions dispatched from the dispatcher, updates state, and then emits changes.
  */
-AppDispatcher.register( payload => {
+CompanyStore.dispatchToken = AppDispatcher.register( payload => {
+
+  AppDispatcher.waitFor([
+    FilterStore.dispatchToken,
+    SortStore.dispatchToken,
+    SearchStore.dispatchToken
+  ]);
+
   let action = payload.action;
 
   switch(action.actionType) {
 
     case AppConstants.GET_COMPANIES_SUCCESS:
       createCompanies(action.companies)
-      CompanyStore.emitChange();
-      break;
-
-    case AppConstants.SORT_COMPANIES:
-      sortCompanies(action.property, action.comparator)
-      CompanyStore.emitChange();
-      break;
-
-    case AppConstants.UPDATE_SEARCH_FILTER:
-      updateSearchFilter(action.value);
-      CompanyStore.emitChange();
-      break;
-
-    case AppConstants.UPDATE_FILTERS:
-      updateFilters(action.filters);
       CompanyStore.emitChange();
       break;
 

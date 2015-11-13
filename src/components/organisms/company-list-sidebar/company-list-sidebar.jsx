@@ -11,13 +11,9 @@ import 'jquery-ui';
 const CompanyListSidebar = React.createClass({
 
   propTypes: {
-    filters: React.PropTypes.object,
-    filterableProps: React.PropTypes.object
+    filters: React.PropTypes.array
   },
 
-  /**
-   * FIXME: This `_.cloneDeep` seems very much like an anti-pattern to me
-   */
   getInitialState: function() {
     return ({
       updatedState: true,
@@ -46,10 +42,10 @@ const CompanyListSidebar = React.createClass({
    * This is called whenever any one of the internal <SidebarRangeFilter>
    * elements changes.
    */
-  _onRangeFilterChange: function(property, values) {
+  _onRangeFilterChange: function(name, values) {
     let updatedFilters = this.state.filters;
 
-    updatedFilters[property].values = values;
+    updatedFilters[name].values = values;
 
     this.setState({
       filters: updatedFilters,
@@ -65,31 +61,23 @@ const CompanyListSidebar = React.createClass({
       updatedState: true
     });
 
-    AppActions.updateFilters(this.state.filters);
+    AppActions.setFilters(this.state.filters);
   },
 
   render: function() {
 
-    // TODO: Should probably move this into some store state.
-    let tooltipContent = {
-      'salary': 'An average of all internship salaries from the company',
-      'funness': 'General funness of the internship from 0 - 100',
-      'perks': 'How awesome the perks were from 0 - 100',
-      'difficulty': 'How challenging/long the interview process was from 0 - 100'
-    };
-
-    let filters = _.map(this.state.filters, (filter, property) => {
+    let filters = _.map(this.state.filters, (filter, i) => {
       return (
         <div className='sidebar-filter'>
           <div className='filter-name'>
-            {this.props.filterableProps[property]}
+            {filter.displayName}
             <i className='material-icons'
-              title={tooltipContent[property]}>
+              title={filter.description}>
               info_outline
             </i>
           </div>
           <SidebarRangeFilter
-            property={property}
+            name={filter.name}
             values={filter.values}
             range={filter.range}
             step={filter.step}

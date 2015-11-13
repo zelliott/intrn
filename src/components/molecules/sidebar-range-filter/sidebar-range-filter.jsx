@@ -7,7 +7,7 @@ const SidebarRangeFilter = React.createClass({
 
   propTypes: {
     action: React.PropTypes.func,
-    property: React.PropTypes.string,
+    name: React.PropTypes.string,
     range: React.PropTypes.arrayOf(React.PropTypes.number),
     values: React.PropTypes.arrayOf(React.PropTypes.number),
     step: React.PropTypes.number
@@ -39,14 +39,14 @@ const SidebarRangeFilter = React.createClass({
       values: data.values
     });
 
-    this.props.action.call(this, this.props.property, data.values);
+    this.props.action.call(this, this.props.name, data.values);
   },
 
   render: function() {
     let minValue = this.state.values[0];
     let maxValue = this.state.values[1];
 
-    if (this.props.property === 'salary') {
+    if (this.props.name === 'salary') {
       minValue = '$' + minValue;
       maxValue = '$' + maxValue;
     }

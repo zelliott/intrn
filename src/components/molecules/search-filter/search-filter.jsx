@@ -1,23 +1,26 @@
 import './search-filter.less';
-
 import React from 'react/addons';
 import AppActions from '../../../js/actions/app-actions';
 import InputText from '../../atoms/input-text/input-text.jsx';
 
 const SearchFilter = React.createClass({
 
+  propTypes: {
+    search: React.PropTypes.string
+  },
+
   getInitialState: function() {
     return ({
-      value: ''
+      search: this.props.search
     });
   },
 
   _onChange: function(event) {
     this.setState({
-      value: event.target.value
+      search: event.target.value
     });
 
-    AppActions.updateSearchFilter(event.target.value);
+    AppActions.setSearch(event.target.value);
   },
 
   render: function() {
@@ -26,7 +29,7 @@ const SearchFilter = React.createClass({
         <i className='material-icons'>search</i>
         <InputText
           name='search-filter'
-          value={this.state.value}
+          value={this.state.search}
           placeholder='Search for companies'
           onChange={this._onChange} />
       </div>
