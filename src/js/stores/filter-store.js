@@ -31,6 +31,23 @@ let _filters = {
     step: 5,
     description: 'A rating of an internship\'s perks, on a scale from 0 to 100.'
   },
+  roles: {
+    id: '3',
+    name: 'roles',
+    displayName: 'Roles',
+    type: VALUE_FILTER,
+    values: [
+      {
+        value: 'Software Engineering',
+        selected: false
+      },
+      {
+        value: 'Design',
+        selected: false
+      }
+    ],
+    description: 'Filter your search by a specific set of roles.'
+  }
 };
 
 function createFilters(filters) {

@@ -1,0 +1,69 @@
+@import '../../../stylesheets/common';
+
+.modal-form {
+  width: 650px;
+  margin: 0 auto;
+
+  .form-header {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 40px;
+  }
+
+  form {
+
+    .form-block,
+    .form-inline-block {
+      margin-bottom: 40px;
+
+      .block-header {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      input {
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 18px;
+        padding: 10px;
+
+        &:hover {
+          border-color: #ccc;
+        }
+
+        &:focus {
+          border-color: @blue;
+        }
+      }
+    }
+
+    .form-block {
+      input[type=text] {
+        width: 628px;
+      }
+    }
+
+    .form-inline-block {
+      display: inline-block;
+
+      input[type=number] {
+        width: 100px;
+      }
+    }
+
+    .form-inline-block + .form-inline-block {
+      margin-left: 20px;
+    }
+
+    button {
+      background: @green;
+      border-bottom: 3px solid @dark-green;
+      border-radius: 5px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 20px;
+    }
+  }
+}

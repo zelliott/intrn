@@ -1,9 +1,9 @@
 import './header.less';
-
 import React from 'react/addons';
 import Button from '../../atoms/button/button.jsx'
 import {Link} from 'react-router';
 import SearchFilter from '../search-filter/search-filter.jsx';
+import AppActions from '../../../js/actions/app-actions';
 
 var Header = React.createClass({
 
@@ -12,7 +12,7 @@ var Header = React.createClass({
   },
 
   showAddCompanyModal: function() {
-
+    AppActions.showModal('add_company');
   },
 
   render: function() {

@@ -7,55 +7,53 @@ const SidebarValueFilter = React.createClass({
 
   propTypes: {
     action: React.PropTypes.func,
-    property: React.PropTypes.string,
-    range: React.PropTypes.arrayOf(React.PropTypes.number),
-    values: React.PropTypes.arrayOf(React.PropTypes.number),
-    step: React.PropTypes.number
+    name: React.PropTypes.string,
+    values: React.PropTypes.array(React.PropTypes.object)
   },
 
   getInitialState: function() {
     return ({
-      values: this.props.values
+      values: _.cloneDeep(this.props.values)
     });
   },
 
-  componentDidMount: function() {
-    $(this.getDOMNode()).find('.range').slider({
-      range: true,
-      min: this.props.range[0],
-      max: this.props.range[1],
-      step: this.props.step,
-      values: this.state.values,
-      slide: this._onChange.bind(this)
+  _onClick: function(event) {
+    let updatedValues = this.state.values;
+    let value = $(event.target).data('value');
+
+    _.each(updatedValues, (updatedValue, i) => {
+      if (updatedValue.value === value) {
+        updatedValues[i].selected = !updatedValues[i].selected;
+      }
     });
-  },
 
-  componentWillUnmount: function() {
-    $(this.getDOMNode()).find('.range').slider('destroy');
-  },
-
-  _onChange: function(event, data) {
     this.setState({
-      values: data.values
+      values: updatedValues
     });
 
-    this.props.action.call(this, this.props.property, data.values);
+    this.props.action.call(this, this.props.name, updatedValues);
   },
 
   render: function() {
-    let minValue = this.state.values[0];
-    let maxValue = this.state.values[1];
 
-    if (this.props.property === 'salary') {
-      minValue = '$' + minValue;
-      maxValue = '$' + maxValue;
-    }
+    let filterOptions = _.map(this.state.values, value => {
+      let classes = React.addons.classSet({
+        'selected': value.selected
+      });
+
+      return (
+        <button
+          className={classes}
+          onClick={this._onClick}
+          data-value={value.value}>
+          {value.value}
+        </button>
+      );
+    });
 
     return (
-      <div className='range-filter clearfix'>
-        <div className='range'></div>
-        <div className='min'>{minValue}</div>
-        <div className='max'>{maxValue}</div>
+      <div className='value-filter'>
+        {filterOptions}
       </div>
     );
   }

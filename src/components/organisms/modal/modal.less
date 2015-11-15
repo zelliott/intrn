@@ -1,0 +1,38 @@
+@import '../../../stylesheets/common';
+
+.modal {
+  background: #fff;
+  display: none;
+  height: 100vh;
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+
+  .modal-upper {
+    display: block;
+    height: 100px;
+    position: relative;
+
+    button {
+      position: absolute;
+      right: 80px;
+      top: 50px;
+
+      i {
+        border-radius: 50px;
+        color: #999;
+        font-size: 30px;
+        padding: 10px;
+
+        &:hover {
+          background: #eee;
+          color: #333;
+        }
+      }
+    }
+  }
+
+  &.open {
+    display: block;
+  }
+}

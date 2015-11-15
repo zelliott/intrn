@@ -47,9 +47,9 @@ const CompanyApi = {
     });
   },
 
-  get: function(id, success, failure) {
+  get: function(company, success, failure) {
     $.ajax({
-      url: BASE_URL + id,
+      url: BASE_URL + company.name,
       type: 'GET',
       dataType: 'json',
       success: function(data) {

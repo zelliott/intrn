@@ -6,31 +6,46 @@ import Button from '../../atoms/button/button.jsx';
 
 const Modal = React.createClass({
 
+  propTypes: {
+    open: React.PropTypes.bool,
+    name: React.PropTypes.string
+  },
+
   getInitialState: function() {
     return ({
-      open: false
+      open: this.props.open
     });
   },
 
-  toggleModal: function() {
+  componentWillReceiveProps: function(props) {
     this.setState({
-      open: !this.state.open
+      open: props.open
+    });
+  },
+
+  closeModal: function() {
+    this.setState({
+      open: false
     });
 
-    // AppActions call
+    AppActions.hideModal(this.props.name);
   },
 
   render: function() {
 
-    let modalStyle = {
-      display: this.state.open ? 'show' : 'none'
-    };
+    let classes = React.addons.classSet({
+      'modal': true,
+      'open': this.state.open
+    });
 
     return (
-      <div className='modal' style={modalStyle}>
-        <Button className='close-modal'
-          action={this.toggleModal}
-          icon='close' />
+    <div className={classes}>
+        <div className='modal-upper'>
+          <Button className='close-modal'
+            action={this.closeModal}
+            icon='close' />
+        </div>
+        {this.props.children}
       </div>
     );
   }

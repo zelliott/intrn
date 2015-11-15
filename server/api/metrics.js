@@ -8,40 +8,18 @@ const router = express.Router();
 router.use(morgan('dev'));
 
 function notFoundHandler(res) {
-  return res.status(404).send('Company could not be found!');
+  return res.status(404).send('Metric could not be found!');
 }
 
 function errorHandler(res, err) {
   return res.status(500).send(err);
 }
 
-router.route('/companies')
+router.route('/metrics/:metric_id')
 
-  // create a Company (accessed at POST http://localhost:8080/api/companies)
-  .post(function(req, res) {
-
-    // Create the Company and check for errors
-    Company.create(req.body, function(err, company) {
-      if (err) return errorHandler(res, err);
-
-      res.json(company);
-    });
-  })
-
-  // get all the Companies (accessed at GET http://localhost/api/companies)
+  // get the Company with that id (accessed at GET http://localhost:8080/api/companies/:company_id)
   .get(function(req, res) {
-    Company.find(function(err, companies) {
-      if (err) return errorHandler(res, err);
-
-      res.json(companies);
-    });
-  });
-
-router.route('/companies/:company_name')
-
-  // get the Company with that name (accessed at GET http://localhost:8080/api/companies/:company_name)
-  .get(function(req, res) {
-    Company.findOne({name: req.params.name}, function(err, company) {
+    Company.findOne({id: req.params.company_id}, function(err, company) {
       if (err) return errorHandler(res, err);
 
       if (!company) return notFoundHandler(res);

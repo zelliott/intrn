@@ -6,13 +6,25 @@ const CompanySchema = new Schema({
   id: String,
   name: String,
   rating: Number,
-  salary: Number,
-  funness: Number,
-  perks: Number,
+  salary: {
+    type: Schema.ObjectId,
+    ref: 'Metric'
+  },
+  funness: {
+    type: Schema.ObjectId,
+    ref: 'Metric'
+  },
+  perks: {
+    type: Schema.ObjectId,
+    ref: 'Metric'
+  },
+  difficulty: {
+    type: Schema.ObjectId,
+    ref: 'Metric'
+  },
   location: String,
   classSize: Number,
   length: Number,
-  difficulty: Number,
   roles: [{
     type: Schema.ObjectId,
     ref: 'Role'

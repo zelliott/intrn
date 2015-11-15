@@ -2,6 +2,7 @@ import './company-list-sidebar.less';
 import AppActions from '../../../js/actions/app-actions';
 import Button from '../../atoms/button/button.jsx';
 import SidebarRangeFilter from '../../molecules/sidebar-range-filter/sidebar-range-filter.jsx';
+import SidebarValueFilter from '../../molecules/sidebar-value-filter/sidebar-value-filter.jsx';
 import CompanyStore from '../../../js/stores/company-store';
 import React from 'react/addons';
 import 'lodash';
@@ -24,7 +25,7 @@ const CompanyListSidebar = React.createClass({
   componentDidMount: function() {
 
     // FIXME: Bad to use JQuery for this
-    $($(this.getDOMNode()).find('.filter-name i')).tooltip({
+    $(this.getDOMNode()).find('.filter-name i').tooltip({
       tooltipClass: 'filter-name-tooltip',
       position: {
         my: 'left+25',
@@ -39,10 +40,9 @@ const CompanyListSidebar = React.createClass({
   },
 
   /**
-   * This is called whenever any one of the internal <SidebarRangeFilter>
-   * elements changes.
+   * This is called whenever any one of the internal filters changes.
    */
-  _onRangeFilterChange: function(name, values) {
+  _onFilterChange: function(name, values) {
     let updatedFilters = this.state.filters;
 
     updatedFilters[name].values = values;
@@ -67,23 +67,50 @@ const CompanyListSidebar = React.createClass({
   render: function() {
 
     let filters = _.map(this.state.filters, (filter, i) => {
-      return (
-        <div className='sidebar-filter'>
-          <div className='filter-name'>
-            {filter.displayName}
-            <i className='material-icons'
-              title={filter.description}>
-              info_outline
-            </i>
+
+      switch (filter.type) {
+        case 'RANGE_FILTER':
+
+        return (
+          <div className='sidebar-filter'>
+            <div className='filter-name'>
+              {filter.displayName}
+              <i className='material-icons'
+                title={filter.description}>
+                info_outline
+              </i>
+            </div>
+            <SidebarRangeFilter
+              name={filter.name}
+              values={filter.values}
+              range={filter.range}
+              step={filter.step}
+              action={this._onFilterChange} />
           </div>
-          <SidebarRangeFilter
-            name={filter.name}
-            values={filter.values}
-            range={filter.range}
-            step={filter.step}
-            action={this._onRangeFilterChange} />
-        </div>
-      );
+        );
+
+          break;
+
+        case 'VALUE_FILTER':
+
+          return (
+            <div className='sidebar-filter'>
+              <div className='filter-name'>
+                {filter.displayName}
+                <i className='material-icons'
+                  title={filter.description}>
+                  info_outline
+                </i>
+              </div>
+              <SidebarValueFilter
+                name={filter.name}
+                values={filter.values}
+                action={this._onFilterChange} />
+            </div>
+          );
+
+          break;
+      }
     });
 
     let classes = React.addons.classSet({

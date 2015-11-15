@@ -18,6 +18,8 @@ function createCompanies(companies) {
 
   _.each(_companies, company => {
     company.synced = true;
+
+    // company.salary = company.salary.statistics.mean;
   });
 }
 
@@ -35,9 +37,35 @@ function getCompanies(filters, sorts, search) {
       let filterExists = !_.isUndefined(filter);
 
       if (filterExists) {
-        if (companyValue > filter.values[1] || companyValue < filter.values[0]) {
+        if (filter.type === 'RANGE_FILTER') {
+          if (companyValue > filter.values[1] || companyValue < filter.values[0]) {
+            filtered = false;
+            return;
+          }
+        } else if (filter.type === 'VALUE_FILTER') {
           filtered = false;
-          return;
+
+          if (_.isArray(companyValue)) {
+            let validOptions = {};
+
+            _.each(filter.values, value => {
+              if (value.selected) {
+                validOptions[value.value] = true;
+              }
+            });
+
+            if (_.keys(validOptions).length === 0) {
+              filtered = true;
+              return;
+            }
+
+            _.each(companyValue, value => {
+              if (validOptions[value]) {
+                filtered = true;
+                return;
+              }
+            });
+          }
         }
       }
     });
@@ -112,6 +140,11 @@ CompanyStore.dispatchToken = AppDispatcher.register( payload => {
 
     case AppConstants.GET_COMPANIES_SUCCESS:
       createCompanies(action.companies)
+      CompanyStore.emitChange();
+      break;
+
+    case AppConstants.ADD_COMPANIES_SUCCESS:
+      // create(action.company);
       CompanyStore.emitChange();
       break;
 
