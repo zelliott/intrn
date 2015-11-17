@@ -9,58 +9,42 @@ import CompanyApi from '../apis/company-api';
 const AppActions = {
 
   addCompany: function(company) {
-
-    // TODO:
-    // Not sure if needed
-    // AppDispatcher.handleViewAction({
-    //   actionType: AppConstants.ADD_COMPANY,
-    //   company: company
-    // });
-
-    CompanyApi.get(company, (company) => {
-
-      // TODO:
-      // We found an existing company, so update it
-      // Update metrics
-
-    }, (error) => {
-
-      // TODO:
-      // We didn't find an existing company, so create it
-      // Create company
-      CompanyApi.create(company, (company) => {
-        AppDispatcher.handleServerAction({
-          actionType: AppConstants.ADD_COMPANY_SUCCESS,
-          company: company
-        });
-      }, (error) => {
-        AppDispatcher.handleServerAction({
-          actionType: AppConstants.ADD_COMPANY_FAIL,
-          error: error
-        });
-      });
-
-    });
-  },
-
-  getCompany: function(company) {
     AppDispatcher.handleViewAction({
-      actionType: AppConstants.GET_COMPANY,
-      id: id
+      actionType: AppConstants.ADD_COMPANY,
+      company: company
     });
 
-    CompanyApi.get(id, (company) => {
+    CompanyApi.create(company, (company) => {
       AppDispatcher.handleServerAction({
-        actionType: AppConstants.GET_COMPANY_SUCESS,
+        actionType: AppConstants.ADD_COMPANY_SUCCESS,
         company: company
       });
     }, (error) => {
       AppDispatcher.handleServerAction({
-        actionType: AppConstants.GET_COMPANY_FAIL,
+        actionType: AppConstants.ADD_COMPANY_FAIL,
         error: error
       });
     });
   },
+
+  // getCompany: function(company) {
+  //   AppDispatcher.handleViewAction({
+  //     actionType: AppConstants.GET_COMPANY,
+  //     company: company
+  //   });
+  //
+  //   CompanyApi.get(id, (company) => {
+  //     AppDispatcher.handleServerAction({
+  //       actionType: AppConstants.GET_COMPANY_SUCESS,
+  //       company: company
+  //     });
+  //   }, (error) => {
+  //     AppDispatcher.handleServerAction({
+  //       actionType: AppConstants.GET_COMPANY_FAIL,
+  //       error: error
+  //     });
+  //   });
+  // },
 
   getCompanies: function() {
     AppDispatcher.handleViewAction({

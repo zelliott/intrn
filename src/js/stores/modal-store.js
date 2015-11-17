@@ -10,7 +10,7 @@ const CHANGE_EVENT = 'change';
 
 let _modals = {
   'add_company': {
-    open: true
+    open: false
   }
 };
 

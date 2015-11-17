@@ -1,6 +1,10 @@
 import Company from '../models/company';
+import Metric from '../models/metric';
 import express from 'express';
 import morgan from 'morgan';
+import moment from 'moment';
+import _ from 'lodash';
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -17,24 +21,95 @@ function errorHandler(res, err) {
 
 router.route('/companies')
 
-  // create a Company (accessed at POST http://localhost:8080/api/companies)
+  // Create a Company (accessed at POST http://localhost:8080/api/companies)
   .post(function(req, res) {
+    Company.findOne({ name: req.body.name }, function(err, company) {
+      const _metrics = ['salary', 'funness', 'perks', 'difficulty'];
 
-    // Create the Company and check for errors
-    Company.create(req.body, function(err, company) {
-      if (err) return errorHandler(res, err);
+      if (company) {
 
-      res.json(company);
+        // If a company is found
+        _.each(_metrics, metric => {
+
+          if (req.body[metric]) {
+
+            // FIXME: http://stackoverflow.com/questions/7267102/how-do-i-update-upsert-a-document-in-mongoose
+            // Way too many MongoDB calls...
+            Metric.findOne({ '_id': new mongoose.Types.ObjectId(company[metric]) }, (err, metricModel) => {
+
+              let size = ++metricModel.statistics[0].size;
+              let mean = metricModel.statistics[0].mean;
+
+              metricModel.statistics[0].size = size;
+              metricModel.statistics[0].mean = ((size - 1) / size) * (mean) + (1 / size) * req.body[metric];
+
+              metricModel.values.push({
+                timestamp: new Date().getTime(),
+                value: req.body[metric]
+              });
+
+              metricModel.save();
+            });
+          }
+        });
+      } else {
+
+        // If no company is found, create it
+        _.each(_metrics, metric => {
+
+          let statistics = [];
+          let values = [];
+
+          if (req.body[metric]) {
+            statistics.push({
+              timestamp: new Date().getFullYear(),
+              size: 1,
+              mean: req.body[metric]
+            });
+
+            values.push({
+              timestamp: new Date().getTime(),
+              value: req.body[metric]
+            });
+          } else {
+            statistics.push({
+              size: 0,
+              mean: 0,
+              timestamp: new Date().getFullYear()
+            });
+          }
+
+          let MetricModel = new Metric({
+            statistics: statistics,
+            values: values
+          });
+
+          MetricModel.save();
+
+          req.body[metric] = MetricModel._id;
+        });
+
+        Company.create(req.body, function(err, company) {
+          if (err) return errorHandler(res, err);
+
+          res.json(company);
+        });
+      }
     });
   })
 
   // get all the Companies (accessed at GET http://localhost/api/companies)
   .get(function(req, res) {
-    Company.find(function(err, companies) {
-      if (err) return errorHandler(res, err);
+    Company.find()
+      .populate('salary')
+      .populate('funness')
+      .populate('perks')
+      .populate('difficulty')
+      .exec(function(err, companies) {
+        if (err) return errorHandler(res, err);
 
-      res.json(companies);
-    });
+        res.json(companies);
+      });
   });
 
 router.route('/companies/:company_name')
@@ -49,29 +124,4 @@ router.route('/companies/:company_name')
       res.json(company);
     });
   })
-/*
-  // update the todo with this id (accessed at PUT http://localhost:8080/api/todos/:todo_id)
-  .put(function(req, res) {
-    Todo.update({id: req.params.todo_id}, req.body, function(err, todo) {
-      if (err) return errorHandler(res, err);
-
-      if (!todo) return notFoundHandler(res);
-
-      res.json(todo);
-    });
-  })
-
-  // delete the todo with this id (accessed at DELETE http://localhost:8080/api/todos/:todo_id)
-  .delete(function(req, res) {
-    Todo.remove({
-      id: req.params.todo_id
-    }, function(err, todo) {
-      if (err) return errorHandler(res, err);
-
-      if (!todo) return notFoundHandler(res);
-
-      res.json(todo);
-    });
-  });
-*/
 export default router;

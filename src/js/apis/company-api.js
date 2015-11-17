@@ -13,8 +13,8 @@ const CompanyApi = {
       success: function(data) {
         success(data);
       },
-      error: function() {
-        failure();
+      error: function(xhr, status, error) {
+        failure(error);
       }
     });
   },

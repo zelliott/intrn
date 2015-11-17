@@ -17,61 +17,72 @@ function createCompanies(companies) {
   _companies = companies;
 
   _.each(_companies, company => {
-    company.synced = true;
-
-    // company.salary = company.salary.statistics.mean;
+    company.salary = company.salary.statistics[0].mean;
+    company.funness = company.funness.statistics[0].mean;
+    company.perks = company.perks.statistics[0].mean;
+    company.difficulty = company.difficulty.statistics[0].mean;
   });
 }
 
 function getCompanies(filters, sorts, search) {
-  let companies = _.filter(_companies, company => {
-    let filtered = true;
 
-    if (search.length > 0 && !_.startsWith(company.name, search)) {
-      return false;
-    }
+  let companies;
 
-    _.each(_.keys(company), name => {
-      let filter = filters[name];
-      let companyValue = company[name];
-      let filterExists = !_.isUndefined(filter);
+  if (!filters) {
 
-      if (filterExists) {
-        if (filter.type === 'RANGE_FILTER') {
-          if (companyValue > filter.values[1] || companyValue < filter.values[0]) {
-            filtered = false;
-            return;
-          }
-        } else if (filter.type === 'VALUE_FILTER') {
-          filtered = false;
+    companies = _companies;
 
-          if (_.isArray(companyValue)) {
-            let validOptions = {};
+  } else {
 
-            _.each(filter.values, value => {
-              if (value.selected) {
-                validOptions[value.value] = true;
-              }
-            });
+    companies = _.filter(_companies, company => {
+      let filtered = true;
 
-            if (_.keys(validOptions).length === 0) {
-              filtered = true;
-              return;
+      if (search.length > 0 && !_.startsWith(company.name, search)) {
+        return false;
+      }
+
+      _.each(_.keys(company), name => {
+        let filter = filters[name];
+        let companyValue = company[name];
+        let filterExists = !_.isUndefined(filter);
+
+        if (filterExists) {
+          if (filter.type === 'RANGE_FILTER') {
+            if (companyValue > filter.values[1] || companyValue < filter.values[0]) {
+              filtered = false;
+              return false;
             }
+          } else if (filter.type === 'VALUE_FILTER') {
+            filtered = false;
 
-            _.each(companyValue, value => {
-              if (validOptions[value]) {
+            if (_.isArray(companyValue)) {
+              let validOptions = {};
+
+              _.each(filter.values, value => {
+                if (value.selected) {
+                  validOptions[value.value] = true;
+                }
+              });
+
+              if (_.keys(validOptions).length === 0) {
                 filtered = true;
-                return;
+                return false;
               }
-            });
+
+              _.each(companyValue, value => {
+                if (validOptions[value]) {
+                  filtered = true;
+                  return false;
+                }
+              });
+            }
           }
         }
-      }
-    });
+      });
 
-    return filtered;
-  });
+      return filtered;
+    });
+  }
 
   let sortName;
   let sortDirection;

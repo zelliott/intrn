@@ -29,7 +29,7 @@ const AddCompanyForm = React.createClass({
     AppActions.addCompany({
       name: this.state.name,
       salary: this.state.salary,
-      funness: this.state.salary,
+      funness: this.state.funness,
       perks: this.state.perks,
       difficulty: this.state.difficulty
     });
@@ -41,6 +41,8 @@ const AddCompanyForm = React.createClass({
       perks: '',
       difficulty: ''
     });
+
+    AppActions.hideModal('add_company');
   },
 
   render: function() {
@@ -90,7 +92,8 @@ const AddCompanyForm = React.createClass({
           </div>
           <Button
             name='addCompany'
-            text='Add feedback' />
+            text='Add feedback'
+            icon='add' />
         </form>
       </div>
     );
