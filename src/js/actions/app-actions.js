@@ -82,6 +82,8 @@ const AppActions = {
     });
   },
 
+  // Search, sort, filter
+
   setSearch: function(search) {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.SET_SEARCH,
@@ -103,6 +105,8 @@ const AppActions = {
     });
   },
 
+  // Modal
+
   showModal: function(name) {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.SHOW_MODAL,
@@ -114,6 +118,33 @@ const AppActions = {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.HIDE_MODAL,
       name: name
+    });
+  },
+
+  // AddCompany
+
+  loadCompanyNames: function() {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.LOAD_COMPANY_NAMES
+    });
+
+    CompanyApi.getAllNames( (companyNames) => {
+      AppDispatcher.handleServerAction({
+        actionType: AppConstants.LOAD_COMPANY_NAMES_SUCCESS,
+        companyNames: companyNames
+      });
+    }, (error) => {
+      AppDispatcher.handleServerAction({
+        actionType: AppConstants.LOAD_COMPANY_NAMES_FAIL,
+        error: error
+      });
+    });
+  },
+
+  searchCompanyNames: function(search) {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.SEARCH_COMPANY_NAMES,
+      search: search
     });
   }
 };

@@ -12,15 +12,15 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let _companies = [];
+let _fields = ['salary', 'funness', 'perks', 'difficulty'];
 
 function createCompanies(companies) {
   _companies = companies;
 
   _.each(_companies, company => {
-    company.salary = company.salary.statistics[0].mean;
-    company.funness = company.funness.statistics[0].mean;
-    company.perks = company.perks.statistics[0].mean;
-    company.difficulty = company.difficulty.statistics[0].mean;
+    _.each(_fields, field => {
+      company[field] = Math.round(company[field].statistics[0].mean);
+    });
   });
 }
 
@@ -147,7 +147,7 @@ CompanyStore.dispatchToken = AppDispatcher.register( payload => {
 
   let action = payload.action;
 
-  switch(action.actionType) {
+  switch (action.actionType) {
 
     case AppConstants.GET_COMPANIES_SUCCESS:
       createCompanies(action.companies)
@@ -155,7 +155,6 @@ CompanyStore.dispatchToken = AppDispatcher.register( payload => {
       break;
 
     case AppConstants.ADD_COMPANIES_SUCCESS:
-      // create(action.company);
       CompanyStore.emitChange();
       break;
 

@@ -2,7 +2,6 @@ import './about.less';
 
 import React from 'react/addons';
 import Header from '../../molecules/header/header';
-import Card from '../../molecules/card/card';
 
 const About = React.createClass({
 

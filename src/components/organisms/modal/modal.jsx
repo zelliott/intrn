@@ -17,6 +17,20 @@ const Modal = React.createClass({
     });
   },
 
+  _onKeydown: function(event) {
+    if (event.keyCode == 27) {
+      this.closeModal();
+    }
+  },
+
+  componentWillMount: function() {
+    document.addEventListener('keydown', this._onKeydown, false);
+  },
+
+  componentWillUnmount: function() {
+    document.removeEventListener('keydown', this._onKeydown, false);
+  },
+
   componentWillReceiveProps: function(props) {
     this.setState({
       open: props.open

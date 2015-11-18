@@ -1,5 +1,6 @@
 import AppDispatcher from '../dispatcher/app-dispatcher';
 import AppConstants from '../constants/app-constants';
+import CompanyStore from './company-store';
 import {EventEmitter} from 'events';
 import 'lodash';
 
@@ -8,46 +9,17 @@ import assign from 'object-assign';
 
 const CHANGE_EVENT = 'change';
 
-let _sorts = {
-  rating: {
-    id: '1',
-    name: 'rating',
-    displayName: 'Rating',
-    active: true,
-    direction: true
-  },
-  name: {
-    id: '2',
-    name: 'name',
-    displayName: 'Name',
-    active: false,
-    direction: true
-  },
-  salary: {
-    id: '2',
-    name: 'salary',
-    displayName: 'Salary',
-    active: false,
-    direction: true
-  },
-  funness: {
-    id: '2',
-    name: 'funness',
-    displayName: 'Funness',
-    active: false,
-    direction: true
-  },
-  perks: {
-    id: '2',
-    name: 'perks',
-    displayName: 'Perks',
-    active: false,
-    direction: true
-  }
-};
+let _companyNames = [];
+let _searchedCompanyNames = [];
 
-function setSort(sorts) {
-  _sorts = sorts;
+function loadCompanyNames(companyNames) {
+  _companyNames = _.pluck(companyNames, 'name');
+}
+
+function searchCompanyNames(search) {
+  _searchedCompanyNames = _.filter(_companyNames, name => {
+    return _.startsWith(name, search);
+  });
 }
 
 /**
@@ -56,11 +28,11 @@ function setSort(sorts) {
  * state for all components interested in Companies, the only other method necessary
  * is one for getting all the Companies.
  */
-const SortStore = assign({}, EventEmitter.prototype, {
+const AddCompanyStore = assign({}, EventEmitter.prototype, {
 
   // Emit change whenever the dispatcher has dispatched an event.
   emitChange: function () {
-    console.log('SortStore Change Event Emitted');
+    console.log('AddCompanyStore Change Event Emitted');
     this.emit(CHANGE_EVENT);
   },
 
@@ -72,24 +44,29 @@ const SortStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getSorts: function() {
-    return _sorts;
+  getCompanyNames: function() {
+    return _searchedCompanyNames;
   }
 });
 
 /**
  * Register with the App Dispatcher, and declare how the store handles various
  * actions. This should be the sole way in which a client side model gets updated.
- * Store listens to actions dis patched from the dispatcher, updates state, and then emits changes.
+ * Store listens to actions dispatched from the dispatcher, updates state, and then emits changes.
  */
-SortStore.dispatchToken = AppDispatcher.register( payload => {
+AddCompanyStore.dispatchToken = AppDispatcher.register( payload => {
+
   let action = payload.action;
 
-  switch(action.actionType) {
+  switch (action.actionType) {
+    case AppConstants.LOAD_COMPANY_NAMES_SUCCESS:
+      loadCompanyNames(action.companyNames);
+      AddCompanyStore.emitChange();
+      break;
 
-    case AppConstants.SET_SORTS:
-      setSort(action.sorts);
-      SortStore.emitChange();
+    case AppConstants.SEARCH_COMPANY_NAMES:
+      searchCompanyNames(action.search);
+      AddCompanyStore.emitChange();
       break;
 
     default:
@@ -97,4 +74,4 @@ SortStore.dispatchToken = AppDispatcher.register( payload => {
   }
 });
 
-export default SortStore;
+export default AddCompanyStore;

@@ -8,7 +8,8 @@ const Button = React.createClass({
     className: React.PropTypes.string,
     action: React.PropTypes.func,
     text: React.PropTypes.string,
-    icon: React.PropTypes.string
+    icon: React.PropTypes.string,
+    onMouseDown: React.PropTypes.func
   },
 
   render: function() {
@@ -19,7 +20,9 @@ const Button = React.createClass({
     }
 
     return (
-      <button className={this.props.className} onClick={this.props.action}>
+      <button className={this.props.className}
+        onClick={this.props.action}
+        onMouseDown={this.props.onMouseDown}>
         {this.props.text}
         {icon}
       </button>

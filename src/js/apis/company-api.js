@@ -47,6 +47,20 @@ const CompanyApi = {
     });
   },
 
+  getAllNames: function(success, failure) {
+    $.ajax({
+      url: BASE_URL + 'names',
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        success(data);
+      },
+      error: function(xhr, status, error) {
+        failure(error);
+      }
+    });
+  },
+
   get: function(company, success, failure) {
     $.ajax({
       url: BASE_URL + company.name,

@@ -112,6 +112,17 @@ router.route('/companies')
       });
   });
 
+router.route('/companies/names')
+
+  // get all the Companies (accessed at GET http://localhost/api/companies)
+  .get(function(req, res) {
+    Company.find({}, 'name', function(err, companies) {
+      if (err) return errorHandler(res, err);
+
+      res.json(companies);
+    });
+  });
+
 router.route('/companies/:company_name')
 
   // get the Company with that name (accessed at GET http://localhost:8080/api/companies/:company_name)
