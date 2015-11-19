@@ -10,12 +10,15 @@ const AddCompanyForm = React.createClass({
 
   getInitialState: function() {
     return ({
-      name: '',
-      salary: '',
-      funness: '',
-      perks: '',
-      difficulty: '',
+      data: {
+        name: '',
+        salary: '',
+        funness: '',
+        perks: '',
+        difficulty: ''
+      },
       nameFocus: true,
+      valid: false,
       companyNames: AddCompanyStore.getCompanyNames()
     });
   },
@@ -39,6 +42,7 @@ const AddCompanyForm = React.createClass({
         if (value === '') {
           return true;
         } else {
+          validate.count++;
           value = parseInt(value, 10);
           return _.isNumber(value) && _.inRange(value, 0, Infinity);
         }
@@ -47,6 +51,7 @@ const AddCompanyForm = React.createClass({
         if (value === '') {
           return true;
         } else {
+          validate.count++;
           value = parseInt(value, 10);
           return _.isNumber(value) && _.inRange(value, 0, 101);
         }
@@ -55,6 +60,7 @@ const AddCompanyForm = React.createClass({
         if (value === '') {
           return true;
         } else {
+          validate.count++;
           value = parseInt(value, 10);
           return _.isNumber(value) && _.inRange(value, 0, 101);
         }
@@ -63,38 +69,28 @@ const AddCompanyForm = React.createClass({
         if (value === '') {
           return true;
         } else {
+          validate.count++;
           value = parseInt(value, 10);
           return _.isNumber(value) && _.inRange(value, 0, 101);
         }
-      }
+      },
+      count: 0
     };
 
     _.each(_.keys(data), key => {
       let datum = data[key];
       let validData = validate[key](datum, 10);
 
-      // if (!validData) {
-      //   errors.push({
-      //     field: key,
-      //     message: errorMessages[key]
-      //   });
-      // }
-
       valid = valid && validData;
     });
 
-
-
-    return valid;
-  },
-
-  _searchCompanyNames: function(search) {
-    AppActions.searchCompanyNames(search)
+    valid = valid && validate.count > 0;
 
     this.setState({
-      companyNames: AddCompanyStore.getCompanyNames()
+      valid: valid
     });
   },
+
 
   _onBlur: function() {
     this.setState({
@@ -109,59 +105,66 @@ const AddCompanyForm = React.createClass({
   },
 
   _onChange: function(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
+    let name = event.target.name;
+    let value = event.target.value;
+    let updatedData = _.extend({}, this.state.data);
 
-    if (event.target.name === 'name') {
-      this._searchCompanyNames(event.target.value);
+    updatedData[name] = value;
+
+    if (name === 'name') {
+      AppActions.searchCompanyNames(value);
+
+      this.setState({
+        data: updatedData,
+        companyNames: AddCompanyStore.getCompanyNames()
+      });
+
+    } else {
+      this.setState({
+        data: updatedData
+      });
     }
+
+    this.validate(updatedData);
   },
 
   _autoFill: function(name) {
+    let updatedData = _.extend({}, this.state.data);
+
+    updatedData.name = name;
+
     this.setState({
-      name: name
+      data: updatedData
     });
   },
 
   _onSubmit: function() {
     event.preventDefault();
 
-    let data = {
-      name: this.state.name,
-      salary: this.state.salary,
-      funness: this.state.funness,
-      perks: this.state.perks,
-      difficulty: this.state.difficulty
+    AppActions.addCompany(this.state.data);
+
+    let clearedData = {
+      name: '',
+      salary: '',
+      funness: '',
+      perks: '',
+      difficulty: ''
     };
 
-    if (this.validate(data)) {
-      AppActions.addCompany(data);
+    this.setState({
+      data: clearedData
+    });
 
-      this.setState({
-        name: '',
-        salary: '',
-        funness: '',
-        perks: '',
-        difficulty: ''
-      });
-
-      AppActions.hideModal('add_company');
-    }
+    AppActions.hideModal('add_company');
   },
 
   componentDidMount: function() {
     AppActions.loadCompanyNames();
   },
 
-  componentDidUpdate: function() {
-    if (this.state.nameFocus) {
-      React.findDOMNode(this.refs.name).focus();
-    }
-  },
-
   render: function() {
-    let dropdownShow = this.state.nameFocus && (this.state.companyNames.length !== 0);
+    let dropdownShow = this.state.nameFocus && this.state.data.name.length !== 0;
+    let noCompanies = this.state.companyNames.length === 0;
     let companyNames = _.map(this.state.companyNames, name => {
       return (
         <Button
@@ -169,6 +172,12 @@ const AddCompanyForm = React.createClass({
           onMouseDown={this._autoFill.bind(this, name)} />
       );
     });
+
+    if (noCompanies) {
+      companyNames = (
+        <div className='no-companies'>No companies found</div>
+      );
+    }
 
     return (
       <div className='modal-form'>
@@ -179,7 +188,7 @@ const AddCompanyForm = React.createClass({
             <InputText
               name={'name'}
               ref={'name'}
-              value={this.state.name}
+              value={this.state.data.name}
               placeholder={'Begin typing to find companies'}
               onChange={this._onChange}
               onBlur={this._onBlur}
@@ -195,7 +204,7 @@ const AddCompanyForm = React.createClass({
             <InputNumber
               name={'salary'}
               ref={'salary'}
-              value={this.state.salary}
+              value={this.state.data.salary}
               placeholder={''}
               onChange={this._onChange} />
           </div>
@@ -204,7 +213,7 @@ const AddCompanyForm = React.createClass({
             <InputNumber
               name={'funness'}
               ref={'funness'}
-              value={this.state.funness}
+              value={this.state.data.funness}
               placeholder={'0 - 100'}
               onChange={this._onChange} />
           </div>
@@ -213,7 +222,7 @@ const AddCompanyForm = React.createClass({
             <InputNumber
               name={'perks'}
               ref={'perks'}
-              value={this.state.perks}
+              value={this.state.data.perks}
               placeholder={'0 - 100'}
               onChange={this._onChange} />
           </div>
@@ -222,14 +231,15 @@ const AddCompanyForm = React.createClass({
             <InputNumber
               name={'difficulty'}
               ref={'difficulty'}
-              value={this.state.difficulty}
+              value={this.state.data.difficulty}
               placeholder={'0 - 100'}
               onChange={this._onChange} />
           </div>
           <Button
             name='addCompany'
             text='Add feedback'
-            icon='add' />
+            icon='add'
+            disabled={!this.state.valid} />
         </form>
       </div>
     );

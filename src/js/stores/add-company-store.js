@@ -18,7 +18,7 @@ function loadCompanyNames(companyNames) {
 
 function searchCompanyNames(search) {
   _searchedCompanyNames = _.filter(_companyNames, name => {
-    return _.startsWith(name, search);
+    return search.length !== 0 && _.startsWith(name, search);
   });
 }
 

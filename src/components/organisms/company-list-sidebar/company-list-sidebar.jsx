@@ -49,7 +49,7 @@ const CompanyListSidebar = React.createClass({
 
     this.setState({
       filters: updatedFilters,
-      updatedState: this.state.filters === this.props.filters
+      updatedState: _.isEqual(this.state.filters, this.props.filters)
     });
   },
 
@@ -113,20 +113,16 @@ const CompanyListSidebar = React.createClass({
       }
     });
 
-    let classes = React.addons.classSet({
-      'update-filters-button': true,
-      disabled: this.state.updatedState,
-    });
-
     return (
       <div>
         <div className='filters'>{filters}</div>
         <div className='update-filters'>
           <Button
-            className={classes}
+            className='update-filters-button'
             text='Filter list'
             icon='refresh'
-            action={this.updateFilters} />
+            action={this.updateFilters}
+            disabled={this.state.updatedState} />
         </div>
       </div>
     );

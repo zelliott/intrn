@@ -63,13 +63,19 @@
       color: #fff;
       font-weight: 600;
       font-size: 16px;
-      padding: 10px 20px;
+      padding: 12px 20px;
 
       i {
         font-size: 20px;
         margin: -4px 0 0 10px;
         vertical-align: middle;
       }
+    }
+
+    > button:disabled {
+      background: #ccc;
+      border-bottom: none;
+      color: #fff;
     }
 
     .input-dropdown {
@@ -101,6 +107,12 @@
 
     .dropdown-hide {
       display: none;
+    }
+
+    .no-companies {
+      color: #999;
+      padding: 10px;
+      text-align: center;
     }
   }
 }
