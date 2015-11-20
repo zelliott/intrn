@@ -10,7 +10,11 @@ const MetricSchema = new Schema({
   }],
   values: [{
     timestamp: Date,
-    value: Number
+    value: Number,
+    role: {
+      type: Schema.ObjectId,
+      ref: 'Role'
+    }
   }]
 });
 

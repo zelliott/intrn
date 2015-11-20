@@ -1,5 +1,6 @@
 import Company from '../models/company';
 import Metric from '../models/metric';
+import Role from '../models/role';
 import express from 'express';
 import morgan from 'morgan';
 import moment from 'moment';
@@ -52,6 +53,18 @@ router.route('/companies')
             });
           }
         });
+
+        if (req.body.role) {
+          Role.findOne({ 'name': req.body.role }, (err, role) => {
+            if (!_.contains(company.roles, role)) {
+              company.roles.push(role_.id);
+              role.count++;
+              role.save();
+              company.save();
+            }
+          });
+        }
+
       } else {
 
         // If no company is found, create it
@@ -88,6 +101,14 @@ router.route('/companies')
 
           req.body[metric] = MetricModel._id;
         });
+
+        if (req.body.role) {
+          Role.findOne({ 'name': req.body.role }, (err, role) => {
+            role.count++;
+            role.save();
+            req.body.role = [role._id];
+          });
+        }
 
         Company.create(req.body, function(err, company) {
           if (err) return errorHandler(res, err);

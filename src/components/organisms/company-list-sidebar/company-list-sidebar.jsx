@@ -17,8 +17,8 @@ const CompanyListSidebar = React.createClass({
 
   getInitialState: function() {
     return ({
-      updatedState: true,
-      filters: _.cloneDeep(this.props.filters)
+      updatedState: false,
+      filters: this.props.filters
     });
   },
 
@@ -49,7 +49,7 @@ const CompanyListSidebar = React.createClass({
 
     this.setState({
       filters: updatedFilters,
-      updatedState: _.isEqual(this.state.filters, this.props.filters)
+      updatedState: true
     });
   },
 
@@ -58,7 +58,7 @@ const CompanyListSidebar = React.createClass({
    */
   updateFilters: function() {
     this.setState({
-      updatedState: true
+      updatedState: false
     });
 
     AppActions.setFilters(this.state.filters);
@@ -122,7 +122,7 @@ const CompanyListSidebar = React.createClass({
             text='Filter list'
             icon='refresh'
             action={this.updateFilters}
-            disabled={this.state.updatedState} />
+            disabled={!this.state.updatedState} />
         </div>
       </div>
     );

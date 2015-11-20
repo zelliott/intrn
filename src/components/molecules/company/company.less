@@ -2,13 +2,21 @@
 
 .company {
   border-radius: 5px;
-  color: #555;
+  color: #999;
   margin-top: 20px;
   padding: 15px 0;
 
   &:hover {
-    background: #eee;
+    color: #333;
     cursor: pointer;
+
+    .data-bar {
+      color: @blue;
+
+      .bar-value {
+        background: @blue;
+      }
+    }
   }
 
   > div {
@@ -23,6 +31,14 @@
     line-height: 30px;
   }
 
+  .data-bar {
+    color: @light-blue;
+
+    .bar-value {
+      background: @light-blue;
+    }
+  }
+
   .company-rating {
     color: #aaa;
     font-weight: 600;
@@ -34,6 +50,6 @@
   }
 
   .company-salary {
-    font-weight: 600;
+    font-weight: 500;
   }
 }

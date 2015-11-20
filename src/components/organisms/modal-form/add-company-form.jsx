@@ -15,11 +15,14 @@ const AddCompanyForm = React.createClass({
         salary: '',
         funness: '',
         perks: '',
-        difficulty: ''
+        difficulty: '',
+        role: ''
       },
-      nameFocus: true,
+      nameFocus: false,
+      roleFocus: false,
       valid: false,
-      companyNames: AddCompanyStore.getCompanyNames()
+      companyNames: AddCompanyStore.getCompanyNames(),
+      roleNames: AddCompanyStore.getRoleNames()
     });
   },
 
@@ -74,6 +77,9 @@ const AddCompanyForm = React.createClass({
           return _.isNumber(value) && _.inRange(value, 0, 101);
         }
       },
+      role: value => {
+        return _.contains(this.state.roleNames, value);
+      },
       count: 0
     };
 
@@ -94,13 +100,15 @@ const AddCompanyForm = React.createClass({
 
   _onBlur: function() {
     this.setState({
-      nameFocus: false
+      nameFocus: false,
+      roleFocus: false
     });
   },
 
-  _onFocus: function() {
+  _onFocus: function(event) {
     this.setState({
-      nameFocus: true
+      nameFocus: event.target.name === 'name',
+      roleFocus: event.target.name === 'role'
     });
   },
 
@@ -111,27 +119,42 @@ const AddCompanyForm = React.createClass({
 
     updatedData[name] = value;
 
-    if (name === 'name') {
-      AppActions.searchCompanyNames(value);
+    switch (name) {
+      case 'name':
+        AppActions.searchCompanyNames(value);
 
-      this.setState({
-        data: updatedData,
-        companyNames: AddCompanyStore.getCompanyNames()
-      });
+        this.setState({
+          data: updatedData,
+          companyNames: AddCompanyStore.getCompanyNames()
+        });
 
-    } else {
-      this.setState({
-        data: updatedData
-      });
+        break;
+
+      case 'role':
+        AppActions.searchRoleNames(value);
+
+        this.setState({
+          data: updatedData,
+          roleNames: AddCompanyStore.getRoleNames()
+        });
+
+        break;
+
+      default:
+        this.setState({
+          data: updatedData
+        });
+
+        break;
     }
 
     this.validate(updatedData);
   },
 
-  _autoFill: function(name) {
+  _autoFill: function(name, value) {
     let updatedData = _.extend({}, this.state.data);
 
-    updatedData.name = name;
+    updatedData[name] = value;
 
     this.setState({
       data: updatedData
@@ -148,7 +171,8 @@ const AddCompanyForm = React.createClass({
       salary: '',
       funness: '',
       perks: '',
-      difficulty: ''
+      difficulty: '',
+      role: ''
     };
 
     this.setState({
@@ -160,22 +184,40 @@ const AddCompanyForm = React.createClass({
 
   componentDidMount: function() {
     AppActions.loadCompanyNames();
+    AppActions.loadRoleNames();
   },
 
   render: function() {
-    let dropdownShow = this.state.nameFocus && this.state.data.name.length !== 0;
+    let companyDropdownShow = this.state.nameFocus && this.state.data.name.length !== 0;
+    let roleDropdownShow = this.state.roleFocus && this.state.data.role.length !== 0;
     let noCompanies = this.state.companyNames.length === 0;
+    let noRoles = this.state.roleNames.length === 0;
+
     let companyNames = _.map(this.state.companyNames, name => {
       return (
         <Button
           text={name}
-          onMouseDown={this._autoFill.bind(this, name)} />
+          onMouseDown={this._autoFill.bind(this, 'name', name)} />
+      );
+    });
+
+    let roleNames = _.map(this.state.roleNames, name => {
+      return (
+        <Button
+          text={name}
+          onMouseDown={this._autoFill.bind(this, 'role', name)} />
       );
     });
 
     if (noCompanies) {
       companyNames = (
-        <div className='no-companies'>No companies found</div>
+        <div className='no-dropdown-entries'>No companies found</div>
+      );
+    }
+
+    if (noRoles) {
+      roleNames = (
+        <div className='no-dropdown-entries'>No roles found</div>
       );
     }
 
@@ -194,7 +236,7 @@ const AddCompanyForm = React.createClass({
               onBlur={this._onBlur}
               onFocus={this._onFocus} />
 
-            <div className={dropdownShow ? 'input-dropdown' : 'input-dropdown dropdown-hide'}>
+            <div className={companyDropdownShow ? 'input-dropdown' : 'input-dropdown dropdown-hide'}>
               {companyNames}
             </div>
 
@@ -234,6 +276,22 @@ const AddCompanyForm = React.createClass({
               value={this.state.data.difficulty}
               placeholder={'0 - 100'}
               onChange={this._onChange} />
+          </div>
+          <div className='form-block block-half'>
+            <div className='block-header'>Role</div>
+            <InputText
+              name={'role'}
+              ref={'role'}
+              value={this.state.data.role}
+              placeholder={'Begin typing to find roles'}
+              onChange={this._onChange}
+              onBlur={this._onBlur}
+              onFocus={this._onFocus} />
+
+            <div className={roleDropdownShow ? 'input-dropdown' : 'input-dropdown dropdown-hide'}>
+              {roleNames}
+            </div>
+
           </div>
           <Button
             name='addCompany'

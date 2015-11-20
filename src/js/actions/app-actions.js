@@ -1,6 +1,7 @@
 import AppConstants from '../constants/app-constants';
 import AppDispatcher from '../dispatcher/app-dispatcher';
 import CompanyApi from '../apis/company-api';
+import RoleApi from '../apis/role-api';
 
 /**
  * Actions here perform two purposes: to send the appropriate action on to the
@@ -69,7 +70,7 @@ const AppActions = {
       actionType: AppConstants.GET_ROLES
     });
 
-    RoleApi.getAll( (companies) => {
+    RoleApi.getAll( (roles) => {
       AppDispatcher.handleServerAction({
         actionType: AppConstants.GET_ROLES_SUCCESS,
         roles: roles
@@ -144,6 +145,31 @@ const AppActions = {
   searchCompanyNames: function(search) {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.SEARCH_COMPANY_NAMES,
+      search: search
+    });
+  },
+
+  loadRoleNames: function() {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.LOAD_ROLE_NAMES
+    });
+
+    RoleApi.getAllNames( (roleNames) => {
+      AppDispatcher.handleServerAction({
+        actionType: AppConstants.LOAD_ROLE_NAMES_SUCCESS,
+        roleNames: roleNames
+      });
+    }, (error) => {
+      AppDispatcher.handleServerAction({
+        actionType: AppConstants.LOAD_ROLE_NAMES_FAIL,
+        error: error
+      });
+    });
+  },
+
+  searchRoleNames: function(search) {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.SEARCH_ROLE_NAMES,
       search: search
     });
   }

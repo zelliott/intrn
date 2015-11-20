@@ -42,6 +42,17 @@ router.route('/roles')
     });
   });
 
+router.route('/roles/names')
+
+    // get all the Roles (accessed at GET http://localhost/api/roles)
+    .get(function(req, res) {
+      Role.find({}, 'name', function(err, roles) {
+        if (err) return errorHandler(res, err);
+
+        res.json(roles);
+      });
+    });
+
 router.route('/roles/:role_id')
 
   // get the Role with that id (accessed at GET http://localhost:8080/api/roles/:role_id)
@@ -53,6 +64,6 @@ router.route('/roles/:role_id')
 
       res.json(role);
     });
-  })
+  });
 
 export default router;

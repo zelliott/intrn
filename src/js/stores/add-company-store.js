@@ -1,6 +1,5 @@
 import AppDispatcher from '../dispatcher/app-dispatcher';
 import AppConstants from '../constants/app-constants';
-import CompanyStore from './company-store';
 import {EventEmitter} from 'events';
 import 'lodash';
 
@@ -10,14 +9,26 @@ import assign from 'object-assign';
 const CHANGE_EVENT = 'change';
 
 let _companyNames = [];
+let _roleNames = [];
 let _searchedCompanyNames = [];
+let _searchedRoleNames = [];
 
 function loadCompanyNames(companyNames) {
   _companyNames = _.pluck(companyNames, 'name');
 }
 
+function loadRoleNames(roleNames) {
+  _roleNames = _.pluck(roleNames, 'name');
+}
+
 function searchCompanyNames(search) {
   _searchedCompanyNames = _.filter(_companyNames, name => {
+    return search.length !== 0 && _.startsWith(name, search);
+  });
+}
+
+function searchRoleNames(search) {
+  _searchedRoleNames = _.filter(_roleNames, name => {
     return search.length !== 0 && _.startsWith(name, search);
   });
 }
@@ -46,6 +57,10 @@ const AddCompanyStore = assign({}, EventEmitter.prototype, {
 
   getCompanyNames: function() {
     return _searchedCompanyNames;
+  },
+
+  getRoleNames: function() {
+    return _searchedRoleNames;
   }
 });
 
@@ -66,6 +81,16 @@ AddCompanyStore.dispatchToken = AppDispatcher.register( payload => {
 
     case AppConstants.SEARCH_COMPANY_NAMES:
       searchCompanyNames(action.search);
+      AddCompanyStore.emitChange();
+      break;
+
+    case AppConstants.LOAD_ROLE_NAMES_SUCCESS:
+      loadRoleNames(action.roleNames);
+      AddCompanyStore.emitChange();
+      break;
+
+    case AppConstants.SEARCH_ROLE_NAMES:
+      searchRoleNames(action.search);
       AddCompanyStore.emitChange();
       break;
 

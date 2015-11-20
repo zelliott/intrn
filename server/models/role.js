@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const RoleSchema = new Schema({
   id: String,
-  name: String
+  name: String,
+  count: Number
 });
 
 export default mongoose.model('Role', RoleSchema);

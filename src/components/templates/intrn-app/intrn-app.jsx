@@ -46,7 +46,10 @@ const IntrnApp = React.createClass({
 
   _onChange: function() {
     this.setState({
-      companies: CompanyStore.getCompanies()
+      companies: CompanyStore.getCompanies(),
+      filters: FilterStore.getFilters(),
+      sorts: SortStore.getSorts(),
+      search: SearchStore.getSearch()
     });
   },
 
