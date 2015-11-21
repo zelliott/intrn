@@ -57,7 +57,7 @@ router.route('/companies')
         if (req.body.role) {
           Role.findOne({ 'name': req.body.role }, (err, role) => {
             if (!_.contains(company.roles, role)) {
-              company.roles.push(role_.id);
+              company.roles.push(role._id);
               role.count++;
               role.save();
               company.save();
@@ -106,7 +106,7 @@ router.route('/companies')
           Role.findOne({ 'name': req.body.role }, (err, role) => {
             role.count++;
             role.save();
-            req.body.role = [role._id];
+            req.body.roles = [role._id];
           });
         }
 
@@ -126,6 +126,7 @@ router.route('/companies')
       .populate('funness')
       .populate('perks')
       .populate('difficulty')
+      .populate('roles')
       .exec(function(err, companies) {
         if (err) return errorHandler(res, err);
 

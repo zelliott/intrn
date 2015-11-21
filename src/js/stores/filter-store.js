@@ -1,5 +1,6 @@
 import AppDispatcher from '../dispatcher/app-dispatcher';
 import AppConstants from '../constants/app-constants';
+import RoleStore from './role-store';
 import {EventEmitter} from 'events';
 import 'lodash';
 
@@ -39,10 +40,12 @@ let _filters = {
     values: [
       {
         value: 'Software Engineering',
+        count: 1,
         selected: false
       },
       {
         value: 'Design',
+        count: 1,
         selected: false
       }
     ],
@@ -51,6 +54,7 @@ let _filters = {
 };
 
 function createFilters(filters) {
+
   _filters = filters;
 }
 
@@ -92,6 +96,10 @@ const FilterStore = assign({}, EventEmitter.prototype, {
  */
 FilterStore.dispatchToken = AppDispatcher.register( payload => {
   let action = payload.action;
+
+  AppDispatcher.waitFor([
+    RoleStore.dispatchToken
+  ]);
 
   switch(action.actionType) {
 

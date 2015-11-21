@@ -21,6 +21,8 @@ function createCompanies(companies) {
     _.each(_fields, field => {
       company[field] = Math.round(company[field].statistics[0].mean);
     });
+
+    company.roles = _.map(company.roles, 'name');
   });
 }
 

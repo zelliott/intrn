@@ -51,6 +51,11 @@ RoleStore.dispatchToken = AppDispatcher.register( payload => {
 
   switch(action.actionType) {
 
+    case AppConstants.GET_ROLES_SUCCESS:
+      setRoles(action.roles);
+      RoleStore.emitChange();
+      break;
+
     case AppConstants.SET_ROLES:
       setRoles(action.roles);
       RoleStore.emitChange();

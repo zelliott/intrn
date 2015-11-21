@@ -18,11 +18,17 @@ const CompanyList = React.createClass({
       );
     });
 
-    return (
-      <div className='company-list'>
-        {companies}
-      </div>
-    );
+    if (this.props.companies.length > 0) {
+      return (
+        <div className='company-list'>
+          {companies}
+        </div>
+      );
+    } else {
+      return (
+        <div className='no-companies'>No companies match this search</div>
+      );
+    }
   }
 });
 

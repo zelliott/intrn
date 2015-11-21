@@ -46,7 +46,7 @@ const SidebarValueFilter = React.createClass({
           className={classes}
           onClick={this._onClick}
           data-value={value.value}>
-          {value.value}
+          {value.value + ' ' + value.count}
         </button>
       );
     });
